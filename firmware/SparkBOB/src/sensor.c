@@ -1,39 +1,49 @@
 #include "sensor.h"
-// enable pins for sensors
-// PF4, PF5, PF6, PF7, PB4, PD7, PD6, and PD4
+
+// Array mapping sequential sensors S1-S8 to their physical ADC channels
+// S1=ADC4, S2=ADC5, S3=ADC6, S4=ADC7, S5=ADC11, S6=ADC10, S7=ADC9, S8=ADC8
+const uint8_t sensor_channels[8] = {4, 5, 6, 7, 11, 10, 9, 8};
 
 void init_ADC() 
 {
-    // set all pins to ADC input
-    ADMUX |= (1 << REFS0); // AVcc reference
-    ADCSRA |= (1 << ADEN) | (1 << ADATE) | (7 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // enable auto trigger, adc, prescaler division factor 128
+    // Set reference to AVcc
+    ADMUX |= (1 << REFS0); 
+    ADCSRA |= (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); 
 
-    // high speed mode?
+    // Enable High Speed Mode
     ADCSRB |= (1 << ADHSM);
 }
 
 uint16_t read_ADC(uint8_t channel)
 {
-    // clear ad mux from register ADCSRB admux 5 and the admux 4:0
+    // Clear MUX5 in ADCSRB and MUX4:0 in ADMUX
     ADCSRB &= ~(1 << MUX5);
     ADMUX &= 0xE0; 
 
+    // Handle high channels (ADC8-ADC11)
     if (channel >= 8) 
     {
         ADCSRB |= (1 << MUX5);
         channel -= 8;
     }
 
+    ADMUX |= (channel & 0x07);
+
     ADCSRA |= (1 << ADSC);
-    while (ADCSRA & (1 << ADSC)); // wait for conversion to complete
 
-    return ADC; // 10-bit ADC value (0-1023)
+    while (ADCSRA & (1 << ADSC)); 
+
+    return ADC; 
 }
 
- bool read_sensor(uint8_t sensor_num) 
+bool read_sensor(uint8_t sensor_index) 
 {
-    uint16_t adc_value = read_ADC(sensor_num);
-    return (adc_value < SENSOR_THRESHOLD) ? true : false; // return true (line detected) if below threshold, else false (no line detected)
+    // Prevent out-of-bounds array access
+    if (sensor_index > 7) return false; 
+    
+    // Route the requested sensor index through the channel map
+    uint16_t adc_value = read_ADC(sensor_channels[sensor_index]);
+    
+    // Return true if seeing white (below threshold)
+    return (adc_value < SENSOR_THRESHOLD); 
 }
-
-// TODO: should test the threshold value of sensor reading to ensure appropriate sensitivity

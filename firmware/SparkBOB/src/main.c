@@ -3,33 +3,29 @@
 #include "led.h"
 #include "sensor.h"
 
-// put function declarations here:
-int myFunction(int, int);
-
 void setup() {
-  init_ADC();
-  init_LEDS();
-  init_buttons();
+    init_ADC();
+    init_LEDS();
 }
 
 void loop() {
-  if (read_sensor(3)) 
-  {
-    LED_on(0, 255); // turn on LED0 at full brightness
-  } else {
-    PORTB &= ~(1 << PORTB0); // turn off LED0
-  }
-
-  if (read_sensor(4)) 
-  {
-    LED_on(1, 255); // turn on LED1 at full brightness
-  } else {
-    PORTB &= ~(1 << PORTB1); // turn off LED1
-  }
-
+    // Loop iterates exactly 8 times (0 through 7)
+    for (uint8_t i = 0; i < 8; i++) {
+        
+        // 'i' represents both the sensor index and the LED number
+        if (read_sensor(i)) {
+            LED_on(i, 20); 
+        } else {
+            LED_off(i);     
+        }
+    }
+    button_led_control(); 
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+int main(void)
+{
+    setup();
+    while (1) {
+        loop();
+    }
 }

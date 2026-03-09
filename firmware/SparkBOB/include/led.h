@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 void init_LEDS();
-void LED_on(uint8_t led_num, int8_t brightness);
+void LED_on(uint8_t led_num, uint8_t brightness);
 void init_buttons();
 void button_led_control();
+void LED_off(uint8_t led_num);

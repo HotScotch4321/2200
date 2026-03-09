@@ -2,8 +2,9 @@
 
 #include <avr/io.h>
 #include <stdint.h>
+#include <stdbool.h>
 
-constexpr uint16_t SENSOR_THRESHOLD = 512;
+#define SENSOR_THRESHOLD 512
 
 void init_ADC();
 uint16_t read_ADC(uint8_t channel);
