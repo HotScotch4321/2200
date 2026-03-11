@@ -1,0 +1,678 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html">
+<style type="text/css">
+		h1, h2, h3, h4, h5, h6 {
+			font-family : segoe ui;
+			color : black;
+			background-color : #EDE7D9;
+			padding: 0.3em;
+		}
+
+		h1 {
+			font-size: 1.2em;
+		}		
+
+		h2 {
+			font-size: 1.2em;
+		}
+
+		body {
+			font-family : segoe ui;
+		}
+
+		td, th {
+			padding: 0.5em;
+			text-align : left;
+			width: 10em;
+		}
+		th {
+			background-color : #EEEEEE;
+
+		}
+		th.column1, td.column1 {
+			text-align: left;
+			width : auto;
+		}
+		table {
+			width : 100%;
+			font-size: 0.9em;
+		}
+
+		.DRC_summary_header {
+			padding-bottom : 0.1em;
+			border : 0px solid black;
+			width: 100%;
+			align: left;
+		}
+
+		.DRC_summary_header_col1,
+		.DRC_summary_header_col2, 
+		.DRC_summary_header_col3 {
+			color : black;
+			font-size:100%;
+			padding : 0em;
+			padding-top : 0.2em;
+			padding-bottom 0.2em;
+			border : 0px solid black;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.DRC_summary_header_col1 {
+			font-weight: bold;
+			width: 9em;
+		}
+
+		.DRC_summary_header_col2 {
+			width: 0.1em;
+		
+		}
+
+		.DRC_summary_header_col3 {
+			width : auto;
+		}
+
+		.header_holder {
+		    Width = 100%;
+		    border = 0px solid green;
+		    padding = 0;
+		}
+
+
+		.front_matter, .front_matter_column1, .front_matter_column2, .front_matter_column3
+		{
+			left : 0;
+			top : 0;
+			padding: 0em;
+			padding-top : 0.1em;
+			border : 0px solid black;
+			width : 100%;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.front_matter_column1 {
+			width : 8em;
+			font-weight: bold;
+		}
+
+		.front_matter_column2 {
+			width: 0.1em;
+		}
+
+		.front_matter_column3 {
+			width : auto;
+		}
+
+		.total_column1, .total_column {
+			font-weight : bold;
+		}
+		.total_column1 {
+			text-align : left;
+		}
+		.warning, .error {
+			color : red;
+			font-weight : bold;
+		}
+		tr.onmouseout_odd {
+			background-color : #white;
+		}
+		tr.onmouseout_even { 
+			background-color : #FAFAFA;
+		}
+		tr.onmouseover_odd, tr.onmouseover_even { 
+			background-color : #EEEEEE;
+		} 
+		a:link, a:visited, .q a:link,.q a:active,.q {
+			color: #21489e; 
+		}
+		a:link.callback, a:visited.callback { 
+			color: #21489e;
+		}
+		a:link.customize, a:visited.customize {
+			color: #C0C0C0;
+			position: absolute; 
+			right: 10px;
+		}	
+		p.contents_level1 {
+			font-weight : bold;
+			font-size : 110%;
+			margin : 0.5em;
+		}
+		p.contents_level2 {
+			position : relative;
+			left : 20px;
+			margin : 0.5em;
+		}
+	</style><script type="text/javascript">
+		function coordToMils(coord) {
+			var number = coord / 10000;
+			
+			if (number != number.toFixed(3))
+				number = number.toFixed(3);
+
+			return number + 'mil'
+		}
+
+		function coordToMM(coord) {
+			var number = 0.0254 * coord / 10000;
+			
+			if (number != number.toFixed(4))
+				number = number.toFixed(4);
+			
+			return number + 'mm'
+		}
+	
+		function convertCoord(coordNode, units) {
+			for (var i = 0; i < coordNode.childNodes.length; i++) {
+				coordNode.removeChild(coordNode.childNodes[i]);
+			}
+
+			var coord = coordNode.getAttribute('value');
+			if (coord != null) {
+				if (units == 'mm') {
+					textNode = document.createTextNode(coordToMM(coord));
+					coordNode.appendChild(textNode);
+				} else if (units == 'mil') {
+					textNode = document.createTextNode(coordToMils(coord));		
+					coordNode.appendChild(textNode);	
+				}
+			}
+		}
+	
+		function convertUnits(unitNode, units) {
+			for (var i = 0; i < unitNode.childNodes.length; i++) {
+				unitNode.removeChild(unitNode.childNodes[i]);		
+			}
+		
+			textNode = document.createTextNode(units); 
+			unitNode.appendChild(textNode);
+		}
+	
+		function changeUnits(radio_input, units) {
+			if (radio_input.checked) {
+			
+				var elements = document.getElementsByName('coordinate');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertCoord(elements[i], units);
+					}
+				}
+	
+				var elements = document.getElementsByName('units');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertUnits(elements[i], units);
+					}
+				}
+			}
+		}
+	</script><title>Design Rule Verification Report</title>
+</head>
+<body onload=""><img ALT="Altium" src="
+			file://C:\Users\Public\Documents\Altium\AD25\Templates\AD_logo.png
+		"><h1>Design Rule Verification Report</h1>
+<table class="header_holder">
+<td class="column1">
+<table class="front_matter">
+<tr class="front_matter">
+<td class="front_matter_column1">Date:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">11/03/2026</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">9:47:58 PM</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Elapsed Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">00:00:00</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Filename:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3"><a href="file:///C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc" class="file"><acronym title="C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc">C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc</acronym></a></td>
+</tr>
+</table>
+</td>
+<td class="column2">
+<table class="DRC_summary_header">
+<tr>
+<td class="DRC_summary_header_col1">Warnings:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3" style="color : red">2</td></tr>
+<tr>
+<td class="DRC_summary_header_col1">Rule Violations:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3" style="color : red">104</td></tr>
+</table>
+</td>
+</table><a name="IDZGIH0PLYMLHFJCMSGESWB0UGXEZ3DTGAY0KXABP1HHE234YA3P4O"><h2>Summary</h2></a><table>
+<tr>
+<th class="column1">Warnings</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDLC5QARKHPCZPHDHGMNC4QA0UYBTOJMKUW42RY3HBCOXDOIYAEEBN">Design contains shelved or modified (but not repoured) polygons. The result of DRC is not correct. Recommended to restore/repour all polygons and proceed with DRC again</a></td>
+<td class="column2">2</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">2</td>
+</tr>
+</table><br><table>
+<tr>
+<th class="column1">Rule Violations</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDSE0VMSGRVVJUBQ4C1UEKOFZEQCOCJXFVU4GJT3M3UN4NUPTYXZJJ">Clearance Constraint (Gap=10mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDZI0DHEQJVMT2J3PZIBERTT4BWPNWKHCLENOPTUHOCDXBT3FCTNZI">Short-Circuit Constraint (Allowed=No) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDUATW4BIIEORQGIWPLTXSV25DLCWF0NQKH4ZEOLI2UOXFBWPDBVRC">Un-Routed Net Constraint ( (All) )</a></td>
+<td class="column2">25</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDLC0LC4H3D32GKAGWO001ZSMT4JXLBZJ5UWRKACDEMECS4D3MXMRL">Modified Polygon (Allow modified: No), (Allow shelved: No)</a></td>
+<td class="column2">1</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDPWH4LPK2WUDSBUKIILQ3ZKGVPPJD3TWP0JYAJUM1IH4NFONU2GAH">Width Constraint (Min=10mil) (Max=30mil) (Preferred=20mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDO3VVE2S35FOHBCCJKGKZ5WKNUH05GGCWCG3EDBHMLLFVD2I4AVBM">Routing Topology Rule(Topology=Shortest) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDX3Q2IX3NQYJNJW2L2MLT5KSYIH103JDJV31NLAC2IHYOBWJDHPGL">Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDBBSZC3HVQIS3FQ5ZRR2QJY33WDTRZQPPW52DFKGFWGD2NYNPG3SC">Hole Size Constraint (Min=1mil) (Max=100mil) (All)</a></td>
+<td class="column2">2</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDUGI3ADXJPBWOHZUSCPFWFMH3CLXLSUO45BLJB5OROBKJZDNW52UJ">Hole To Hole Clearance (Gap=10mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDKILHWXFADPARPYYSMXQNERWXE53SBZG11XWJBEZKLFZM1IXPWB">Minimum Solder Mask Sliver (Gap=10mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDZUSMH3H0EJCNMOINPB5PEK0WUCVKXSZJPXUKOIP3LPBPNWSXVHKH">Silk To Solder Mask (Clearance=10mil) (IsPad),(All)</a></td>
+<td class="column2">61</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDZKY1QCDWACVBNZY32ZGEYDRP4OYA5P4QZ213BZIFPQTZC3V1TDPL">Silk to Silk (Clearance=10mil) (All),(All)</a></td>
+<td class="column2">2</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDMJZCKQSORXU35L20LL01C1VCH5WNVTLTDSXQSCCYWULJMQHNDEO">Net Antennae (Tolerance=0mil) (All)</a></td>
+<td class="column2">13</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#ID4EST10GT0TYLPCNWDDAG0LON2J0CSWDTTJ40ER43OS3FJG2PYIP">Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">104</td>
+</tr>
+</table><br><a name="IDHJZXOR1LHRGNNHNXW2FMG345YG21EHSYEBAYQPCPTBG5BHZ1KD4B"><h2>Warnings</h2></a><a name="IDLC5QARKHPCZPHDHGMNC4QA0UYBTOJMKUW42RY3HBCOXDOIYAEEBN"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="warning">Design contains shelved or modified (but not repoured) polygons. The result of DRC is not correct. Recommended to restore/repour all polygons and proceed with DRC again</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1">Polygon named: NONET_L01_P001 In net +5 On Top Layer</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1">Polygon named: NONET_L01_P001 In net +5 On Top Layer</td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDUATW4BIIEORQGIWPLTXSV25DLCWF0NQKH4ZEOLI2UOXFBWPDBVRC"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Un-Routed Net Constraint ( (All) )</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4931.812mil|Location2.X=5540mil|Location1.Y=1980mil|Location2.Y=1635mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4931.812mil|Location2.X=5540mil|Location1.Y=1980mil|Location2.Y=1635mil|Absolute=True">Un-Routed Net Constraint: Net MUX_OUTPUT Between Track (5030mil,2081.812mil)(5031.812mil,2080mil) on Top Layer And Pad J1-1(5440mil,1535mil) on Multi-Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4480mil|Location2.X=5440mil|Location1.Y=1995mil|Location2.Y=1635mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4480mil|Location2.X=5440mil|Location1.Y=1995mil|Location2.Y=1635mil|Absolute=True">Un-Routed Net Constraint: Net SENS_MUX_A Between Track (4580mil,2095mil)(4580mil,2095.04mil) on Top Layer And Pad J1-2(5340mil,1535mil) on Multi-Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4518.189mil|Location2.X=5270.905mil|Location1.Y=1504.094mil|Location2.Y=2134.41mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4518.189mil|Location2.X=5270.905mil|Location1.Y=1504.094mil|Location2.Y=2134.41mil|Absolute=True">Un-Routed Net Constraint: Net SENS_MUX_B Between Pad U15-11(4530mil,2095.04mil) on Top Layer And Pad J1-3(5240mil,1535mil) on Multi-Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4518.189mil|Location2.X=5170.905mil|Location1.Y=1504.094mil|Location2.Y=1764.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4518.189mil|Location2.X=5170.905mil|Location1.Y=1504.094mil|Location2.Y=1764.33mil|Absolute=True">Un-Routed Net Constraint: Net SENS_MUX_C Between Pad U15-14(4530mil,1724.96mil) on Top Layer And Pad J1-4(5140mil,1535mil) on Multi-Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4468.189mil|Location2.X=5070.905mil|Location1.Y=1504.094mil|Location2.Y=1764.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4468.189mil|Location2.X=5070.905mil|Location1.Y=1504.094mil|Location2.Y=1764.33mil|Absolute=True">Un-Routed Net Constraint: Net SENS_MUX_D Between Pad U15-13(4480mil,1724.96mil) on Top Layer And Pad J1-5(5040mil,1535mil) on Multi-Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4668.189mil|Location2.X=4770.905mil|Location1.Y=1504.094mil|Location2.Y=1764.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4668.189mil|Location2.X=4770.905mil|Location1.Y=1504.094mil|Location2.Y=1764.33mil|Absolute=True">Un-Routed Net Constraint: Net GND Between Pad U15-17(4680mil,1724.96mil) on Top Layer And Pad J1-8(4740mil,1535mil) on Multi-Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5058.583mil|Location2.X=5199.748mil|Location1.Y=1986.748mil|Location2.Y=2605.117mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5058.583mil|Location2.X=5199.748mil|Location1.Y=1986.748mil|Location2.Y=2605.117mil|Absolute=True">Un-Routed Net Constraint: Net GND Between Pad U8-4(5091.26mil,2589.566mil) on Bottom Layer And Pad LED1-1(5180mil,2006.496mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5158.283mil|Location2.X=5201.717mil|Location1.Y=1864.781mil|Location2.Y=1963.252mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5158.283mil|Location2.X=5201.717mil|Location1.Y=1864.781mil|Location2.Y=1963.252mil|Absolute=True">Un-Routed Net Constraint: Net NetLED1_2 Between Pad R29-1(5180mil,1882.56mil) on Top Layer And Pad LED1-2(5180mil,1943.504mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4968.189mil|Location2.X=5230.044mil|Location1.Y=2055.67mil|Location2.Y=2526.689mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4968.189mil|Location2.X=5230.044mil|Location1.Y=2055.67mil|Location2.Y=2526.689mil|Absolute=True">Un-Routed Net Constraint: Net sense_8 Between Pad U15-2(4980mil,2095.04mil) on Top Layer And Pad R16-2(5211.224mil,2495mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4918.189mil|Location2.X=5910.044mil|Location1.Y=1685.59mil|Location2.Y=2481.689mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4918.189mil|Location2.X=5910.044mil|Location1.Y=1685.59mil|Location2.Y=2481.689mil|Absolute=True">Un-Routed Net Constraint: Net sense_10 Between Pad U15-22(4930mil,1724.96mil) on Top Layer And Pad R21-2(5891.224mil,2450mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4468.189mil|Location2.X=4591.811mil|Location1.Y=1685.59mil|Location2.Y=2134.41mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4468.189mil|Location2.X=4591.811mil|Location1.Y=1685.59mil|Location2.Y=2134.41mil|Absolute=True">Un-Routed Net Constraint: Net GND Between Pad U15-12(4480mil,2095.04mil) on Top Layer And Pad U15-15(4580mil,1724.96mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4568.189mil|Location2.X=4641.811mil|Location1.Y=1685.59mil|Location2.Y=1764.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4568.189mil|Location2.X=4641.811mil|Location1.Y=1685.59mil|Location2.Y=1764.33mil|Absolute=True">Un-Routed Net Constraint: Net GND Between Pad U15-15(4580mil,1724.96mil) on Top Layer And Pad U15-16(4630mil,1724.96mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4618.189mil|Location2.X=4691.811mil|Location1.Y=1685.59mil|Location2.Y=1764.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4618.189mil|Location2.X=4691.811mil|Location1.Y=1685.59mil|Location2.Y=1764.33mil|Absolute=True">Un-Routed Net Constraint: Net GND Between Pad U15-16(4630mil,1724.96mil) on Top Layer And Pad U15-17(4680mil,1724.96mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4630mil|Location2.X=7396.098mil|Location1.Y=1624.96mil|Location2.Y=2326.726mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4630mil|Location2.X=7396.098mil|Location1.Y=1624.96mil|Location2.Y=2326.726mil|Absolute=True">Un-Routed Net Constraint: Net sense_14 Between Pad U15-18(4730mil,1724.96mil) on Top Layer And Track (7296.098mil,2226.726mil)(7314.23mil,2208.594mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4680mil|Location2.X=7074.68mil|Location1.Y=1624.96mil|Location2.Y=2372.544mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4680mil|Location2.X=7074.68mil|Location1.Y=1624.96mil|Location2.Y=2372.544mil|Absolute=True">Un-Routed Net Constraint: Net sense_13 Between Pad U15-19(4780mil,1724.96mil) on Top Layer And Track (6974.68mil,2272.544mil)(6981.204mil,2279.068mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4730mil|Location2.X=6666.386mil|Location1.Y=1624.96mil|Location2.Y=2444.838mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4730mil|Location2.X=6666.386mil|Location1.Y=1624.96mil|Location2.Y=2444.838mil|Absolute=True">Un-Routed Net Constraint: Net sense_12 Between Pad U15-20(4830mil,1724.96mil) on Top Layer And Track (6566.224mil,2345mil)(6566.386mil,2344.838mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4780mil|Location2.X=6386.098mil|Location1.Y=1624.96mil|Location2.Y=2576.726mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4780mil|Location2.X=6386.098mil|Location1.Y=1624.96mil|Location2.Y=2576.726mil|Absolute=True">Un-Routed Net Constraint: Net sense_11 Between Pad U15-21(4880mil,1724.96mil) on Top Layer And Track (6286.098mil,2476.726mil)(6299.68mil,2463.144mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4880mil|Location2.X=5715.506mil|Location1.Y=1624.96mil|Location2.Y=2651.726mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4880mil|Location2.X=5715.506mil|Location1.Y=1624.96mil|Location2.Y=2651.726mil|Absolute=True">Un-Routed Net Constraint: Net sense_9 Between Pad U15-23(4980mil,1724.96mil) on Top Layer And Track (5615.506mil,2551.726mil)(5635mil,2532.232mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4830mil|Location2.X=5036.866mil|Location1.Y=1995.04mil|Location2.Y=2666.726mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4830mil|Location2.X=5036.866mil|Location1.Y=1995.04mil|Location2.Y=2666.726mil|Absolute=True">Un-Routed Net Constraint: Net sense_7 Between Pad U15-3(4930mil,2095.04mil) on Top Layer And Track (4936.866mil,2566.726mil)(4955mil,2548.592mil) on Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4591mil|Location2.X=4891.811mil|Location1.Y=2055.67mil|Location2.Y=2499mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4591mil|Location2.X=4891.811mil|Location1.Y=2055.67mil|Location2.Y=2499mil|Absolute=True">Un-Routed Net Constraint: Net sense_6 Between Via (4610mil,2480mil) from Top Layer to Bottom Layer And Pad U15-4(4880mil,2095.04mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4251.45mil|Location2.X=4841.811mil|Location1.Y=2055.67mil|Location2.Y=2468.838mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4251.45mil|Location2.X=4841.811mil|Location1.Y=2055.67mil|Location2.Y=2468.838mil|Absolute=True">Un-Routed Net Constraint: Net sense_5 Between Via (4270.45mil,2449.838mil) from Top Layer to Bottom Layer And Pad U15-5(4830mil,2095.04mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3916.45mil|Location2.X=4791.811mil|Location1.Y=2055.67mil|Location2.Y=2423.838mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3916.45mil|Location2.X=4791.811mil|Location1.Y=2055.67mil|Location2.Y=2423.838mil|Absolute=True">Un-Routed Net Constraint: Net sense_4 Between Via (3935.45mil,2404.838mil) from Top Layer to Bottom Layer And Pad U15-6(4780mil,2095.04mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3576.45mil|Location2.X=4741.811mil|Location1.Y=2055.67mil|Location2.Y=2363.838mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3576.45mil|Location2.X=4741.811mil|Location1.Y=2055.67mil|Location2.Y=2363.838mil|Absolute=True">Un-Routed Net Constraint: Net sense_3 Between Via (3595.45mil,2344.838mil) from Top Layer to Bottom Layer And Pad U15-7(4730mil,2095.04mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3241.45mil|Location2.X=4691.811mil|Location1.Y=2055.67mil|Location2.Y=2288.838mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3241.45mil|Location2.X=4691.811mil|Location1.Y=2055.67mil|Location2.Y=2288.838mil|Absolute=True">Un-Routed Net Constraint: Net sense_2 Between Via (3260.45mil,2269.838mil) from Top Layer to Bottom Layer And Pad U15-8(4680mil,2095.04mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2906mil|Location2.X=4641.811mil|Location1.Y=2055.67mil|Location2.Y=2204mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2906mil|Location2.X=4641.811mil|Location1.Y=2055.67mil|Location2.Y=2204mil|Absolute=True">Un-Routed Net Constraint: Net sense_1 Between Via (2925mil,2185mil) from Top Layer to Bottom Layer And Pad U15-9(4630mil,2095.04mil) on Top Layer </acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDLC0LC4H3D32GKAGWO001ZSMT4JXLBZJ5UWRKACDEMECS4D3MXMRL"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Modified Polygon (Allow modified: No), (Allow shelved: No)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2640mil|Location2.X=7365mil|Location1.Y=1437.795mil|Location2.Y=2825mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2640mil|Location2.X=7365mil|Location1.Y=1437.795mil|Location2.Y=2825mil|Absolute=True">Modified Polygon: Polygon Shelved  (NONET_L01_P001) on Top Layer </acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDBBSZC3HVQIS3FQ5ZRR2QJY33WDTRZQPPW52DFKGFWGD2NYNPG3SC"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Hole Size Constraint (Min=1mil) (Max=100mil) (All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4094.375mil|Location2.X=4225.625mil|Location1.Y=1974.375mil|Location2.Y=2105.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4094.375mil|Location2.X=4225.625mil|Location1.Y=1974.375mil|Location2.Y=2105.625mil|Absolute=True">Hole Size Constraint: (130mil &gt; 100mil) Pad Free-M3(4160mil,2040mil) on Multi-Layer Actual Hole Size = 130mil</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5764.375mil|Location2.X=5895.625mil|Location1.Y=1974.375mil|Location2.Y=2105.625mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5764.375mil|Location2.X=5895.625mil|Location1.Y=1974.375mil|Location2.Y=2105.625mil|Absolute=True">Hole Size Constraint: (130mil &gt; 100mil) Pad Free-M3(5830mil,2040mil) on Multi-Layer Actual Hole Size = 130mil</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDZUSMH3H0EJCNMOINPB5PEK0WUCVKXSZJPXUKOIP3LPBPNWSXVHKH"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk To Solder Mask (Clearance=10mil) (IsPad),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5162.563mil|Location2.X=5173.813mil|Location1.Y=2020.556mil|Location2.Y=2031.806mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5162.563mil|Location2.X=5173.813mil|Location1.Y=2020.556mil|Location2.Y=2031.806mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad LED1-1(5180mil,2006.496mil) on Top Layer And Track (5168.188mil,2034.056mil)(5191.812mil,2034.056mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4451.711mil|Location2.X=4462.961mil|Location1.Y=2705.789mil|Location2.Y=2717.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4451.711mil|Location2.X=4462.961mil|Location1.Y=2705.789mil|Location2.Y=2717.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R10-1(4424.768mil,2745mil) on Bottom Layer And Track (4465.21mil,2711.414mil)(4484.79mil,2711.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4451.711mil|Location2.X=4462.961mil|Location1.Y=2772.961mil|Location2.Y=2784.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4451.711mil|Location2.X=4462.961mil|Location1.Y=2772.961mil|Location2.Y=2784.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R10-1(4424.768mil,2745mil) on Bottom Layer And Track (4465.21mil,2778.586mil)(4484.79mil,2778.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4487.039mil|Location2.X=4498.289mil|Location1.Y=2705.789mil|Location2.Y=2717.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4487.039mil|Location2.X=4498.289mil|Location1.Y=2705.789mil|Location2.Y=2717.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R10-2(4525.232mil,2745mil) on Bottom Layer And Track (4465.21mil,2711.414mil)(4484.79mil,2711.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4487.039mil|Location2.X=4498.289mil|Location1.Y=2772.961mil|Location2.Y=2784.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4487.039mil|Location2.X=4498.289mil|Location1.Y=2772.961mil|Location2.Y=2784.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R10-2(4525.232mil,2745mil) on Bottom Layer And Track (4465.21mil,2778.586mil)(4484.79mil,2778.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2771.711mil|Location2.X=2782.961mil|Location1.Y=2410.789mil|Location2.Y=2422.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2771.711mil|Location2.X=2782.961mil|Location1.Y=2410.789mil|Location2.Y=2422.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R1-1(2744.768mil,2450mil) on Bottom Layer And Track (2785.21mil,2416.414mil)(2804.79mil,2416.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2771.711mil|Location2.X=2782.961mil|Location1.Y=2477.961mil|Location2.Y=2489.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2771.711mil|Location2.X=2782.961mil|Location1.Y=2477.961mil|Location2.Y=2489.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R1-1(2744.768mil,2450mil) on Bottom Layer And Track (2785.21mil,2483.586mil)(2804.79mil,2483.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4797.16mil|Location2.X=4808.41mil|Location1.Y=2720.626mil|Location2.Y=2731.876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4797.16mil|Location2.X=4808.41mil|Location1.Y=2720.626mil|Location2.Y=2731.876mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R11-1(4770.218mil,2759.838mil) on Bottom Layer And Track (4810.658mil,2726.25mil)(4830.24mil,2726.25mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4797.16mil|Location2.X=4808.41mil|Location1.Y=2787.799mil|Location2.Y=2799.049mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4797.16mil|Location2.X=4808.41mil|Location1.Y=2787.799mil|Location2.Y=2799.049mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R11-1(4770.218mil,2759.838mil) on Bottom Layer And Track (4810.658mil,2793.424mil)(4830.24mil,2793.424mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4832.488mil|Location2.X=4843.738mil|Location1.Y=2720.626mil|Location2.Y=2731.876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4832.488mil|Location2.X=4843.738mil|Location1.Y=2720.626mil|Location2.Y=2731.876mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.873mil &lt; 10mil) Between Pad R11-2(4870.68mil,2759.838mil) on Bottom Layer And Track (4810.658mil,2726.25mil)(4830.24mil,2726.25mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4832.488mil|Location2.X=4843.738mil|Location1.Y=2787.799mil|Location2.Y=2799.049mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4832.488mil|Location2.X=4843.738mil|Location1.Y=2787.799mil|Location2.Y=2799.049mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R11-2(4870.68mil,2759.838mil) on Bottom Layer And Track (4810.658mil,2793.424mil)(4830.24mil,2793.424mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2807.039mil|Location2.X=2818.289mil|Location1.Y=2410.789mil|Location2.Y=2422.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2807.039mil|Location2.X=2818.289mil|Location1.Y=2410.789mil|Location2.Y=2422.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R1-2(2845.232mil,2450mil) on Bottom Layer And Track (2785.21mil,2416.414mil)(2804.79mil,2416.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2807.039mil|Location2.X=2818.289mil|Location1.Y=2477.961mil|Location2.Y=2489.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2807.039mil|Location2.X=2818.289mil|Location1.Y=2477.961mil|Location2.Y=2489.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R1-2(2845.232mil,2450mil) on Bottom Layer And Track (2785.21mil,2483.586mil)(2804.79mil,2483.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5131.711mil|Location2.X=5142.961mil|Location1.Y=2720.789mil|Location2.Y=2732.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5131.711mil|Location2.X=5142.961mil|Location1.Y=2720.789mil|Location2.Y=2732.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R12-1(5104.768mil,2760mil) on Bottom Layer And Track (5145.21mil,2726.414mil)(5164.79mil,2726.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5131.711mil|Location2.X=5142.961mil|Location1.Y=2787.961mil|Location2.Y=2799.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5131.711mil|Location2.X=5142.961mil|Location1.Y=2787.961mil|Location2.Y=2799.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R12-1(5104.768mil,2760mil) on Bottom Layer And Track (5145.21mil,2793.586mil)(5164.79mil,2793.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5167.039mil|Location2.X=5178.289mil|Location1.Y=2720.789mil|Location2.Y=2732.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5167.039mil|Location2.X=5178.289mil|Location1.Y=2720.789mil|Location2.Y=2732.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R12-2(5205.232mil,2760mil) on Bottom Layer And Track (5145.21mil,2726.414mil)(5164.79mil,2726.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5167.039mil|Location2.X=5178.289mil|Location1.Y=2787.961mil|Location2.Y=2799.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5167.039mil|Location2.X=5178.289mil|Location1.Y=2787.961mil|Location2.Y=2799.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R12-2(5205.232mil,2760mil) on Bottom Layer And Track (5145.21mil,2793.586mil)(5164.79mil,2793.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5471.711mil|Location2.X=5482.961mil|Location1.Y=2705.789mil|Location2.Y=2717.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5471.711mil|Location2.X=5482.961mil|Location1.Y=2705.789mil|Location2.Y=2717.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R17-1(5444.768mil,2745mil) on Bottom Layer And Track (5485.21mil,2711.414mil)(5504.79mil,2711.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5471.711mil|Location2.X=5482.961mil|Location1.Y=2772.961mil|Location2.Y=2784.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5471.711mil|Location2.X=5482.961mil|Location1.Y=2772.961mil|Location2.Y=2784.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R17-1(5444.768mil,2745mil) on Bottom Layer And Track (5485.21mil,2778.586mil)(5504.79mil,2778.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5507.039mil|Location2.X=5518.289mil|Location1.Y=2705.789mil|Location2.Y=2717.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5507.039mil|Location2.X=5518.289mil|Location1.Y=2705.789mil|Location2.Y=2717.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R17-2(5545.232mil,2745mil) on Bottom Layer And Track (5485.21mil,2711.414mil)(5504.79mil,2711.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5507.039mil|Location2.X=5518.289mil|Location1.Y=2772.961mil|Location2.Y=2784.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5507.039mil|Location2.X=5518.289mil|Location1.Y=2772.961mil|Location2.Y=2784.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R17-2(5545.232mil,2745mil) on Bottom Layer And Track (5485.21mil,2778.586mil)(5504.79mil,2778.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5806.711mil|Location2.X=5817.961mil|Location1.Y=2675.789mil|Location2.Y=2687.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5806.711mil|Location2.X=5817.961mil|Location1.Y=2675.789mil|Location2.Y=2687.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R18-1(5779.768mil,2715mil) on Bottom Layer And Track (5820.21mil,2681.414mil)(5839.79mil,2681.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5806.711mil|Location2.X=5817.961mil|Location1.Y=2742.961mil|Location2.Y=2754.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5806.711mil|Location2.X=5817.961mil|Location1.Y=2742.961mil|Location2.Y=2754.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R18-1(5779.768mil,2715mil) on Bottom Layer And Track (5820.21mil,2748.586mil)(5839.79mil,2748.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5842.039mil|Location2.X=5853.289mil|Location1.Y=2675.789mil|Location2.Y=2687.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5842.039mil|Location2.X=5853.289mil|Location1.Y=2675.789mil|Location2.Y=2687.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R18-2(5880.232mil,2715mil) on Bottom Layer And Track (5820.21mil,2681.414mil)(5839.79mil,2681.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5842.039mil|Location2.X=5853.289mil|Location1.Y=2742.961mil|Location2.Y=2754.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5842.039mil|Location2.X=5853.289mil|Location1.Y=2742.961mil|Location2.Y=2754.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R18-2(5880.232mil,2715mil) on Bottom Layer And Track (5820.21mil,2748.586mil)(5839.79mil,2748.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6151.711mil|Location2.X=6162.961mil|Location1.Y=2630.789mil|Location2.Y=2642.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6151.711mil|Location2.X=6162.961mil|Location1.Y=2630.789mil|Location2.Y=2642.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R19-1(6124.768mil,2670mil) on Bottom Layer And Track (6165.21mil,2636.414mil)(6184.79mil,2636.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6151.711mil|Location2.X=6162.961mil|Location1.Y=2697.961mil|Location2.Y=2709.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6151.711mil|Location2.X=6162.961mil|Location1.Y=2697.961mil|Location2.Y=2709.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R19-1(6124.768mil,2670mil) on Bottom Layer And Track (6165.21mil,2703.586mil)(6184.79mil,2703.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6187.039mil|Location2.X=6198.289mil|Location1.Y=2630.789mil|Location2.Y=2642.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6187.039mil|Location2.X=6198.289mil|Location1.Y=2630.789mil|Location2.Y=2642.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R19-2(6225.232mil,2670mil) on Bottom Layer And Track (6165.21mil,2636.414mil)(6184.79mil,2636.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6187.039mil|Location2.X=6198.289mil|Location1.Y=2697.961mil|Location2.Y=2709.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6187.039mil|Location2.X=6198.289mil|Location1.Y=2697.961mil|Location2.Y=2709.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R19-2(6225.232mil,2670mil) on Bottom Layer And Track (6165.21mil,2703.586mil)(6184.79mil,2703.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3107.16mil|Location2.X=3118.41mil|Location1.Y=2495.626mil|Location2.Y=2506.876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3107.16mil|Location2.X=3118.41mil|Location1.Y=2495.626mil|Location2.Y=2506.876mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R2-1(3080.218mil,2534.838mil) on Bottom Layer And Track (3120.658mil,2501.25mil)(3140.24mil,2501.25mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3107.16mil|Location2.X=3118.41mil|Location1.Y=2562.799mil|Location2.Y=2574.049mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3107.16mil|Location2.X=3118.41mil|Location1.Y=2562.799mil|Location2.Y=2574.049mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R2-1(3080.218mil,2534.838mil) on Bottom Layer And Track (3120.658mil,2568.424mil)(3140.24mil,2568.424mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3142.488mil|Location2.X=3153.738mil|Location1.Y=2495.626mil|Location2.Y=2506.876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3142.488mil|Location2.X=3153.738mil|Location1.Y=2495.626mil|Location2.Y=2506.876mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.873mil &lt; 10mil) Between Pad R2-2(3180.68mil,2534.838mil) on Bottom Layer And Track (3120.658mil,2501.25mil)(3140.24mil,2501.25mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3142.488mil|Location2.X=3153.738mil|Location1.Y=2562.799mil|Location2.Y=2574.049mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3142.488mil|Location2.X=3153.738mil|Location1.Y=2562.799mil|Location2.Y=2574.049mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R2-2(3180.68mil,2534.838mil) on Bottom Layer And Track (3120.658mil,2568.424mil)(3140.24mil,2568.424mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6486.711mil|Location2.X=6497.961mil|Location1.Y=2570.789mil|Location2.Y=2582.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6486.711mil|Location2.X=6497.961mil|Location1.Y=2570.789mil|Location2.Y=2582.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R23-1(6459.768mil,2610mil) on Bottom Layer And Track (6500.21mil,2576.414mil)(6519.79mil,2576.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6486.711mil|Location2.X=6497.961mil|Location1.Y=2637.961mil|Location2.Y=2649.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6486.711mil|Location2.X=6497.961mil|Location1.Y=2637.961mil|Location2.Y=2649.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R23-1(6459.768mil,2610mil) on Bottom Layer And Track (6500.21mil,2643.586mil)(6519.79mil,2643.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6522.039mil|Location2.X=6533.289mil|Location1.Y=2570.789mil|Location2.Y=2582.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6522.039mil|Location2.X=6533.289mil|Location1.Y=2570.789mil|Location2.Y=2582.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R23-2(6560.232mil,2610mil) on Bottom Layer And Track (6500.21mil,2576.414mil)(6519.79mil,2576.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6522.039mil|Location2.X=6533.289mil|Location1.Y=2637.961mil|Location2.Y=2649.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6522.039mil|Location2.X=6533.289mil|Location1.Y=2637.961mil|Location2.Y=2649.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R23-2(6560.232mil,2610mil) on Bottom Layer And Track (6500.21mil,2643.586mil)(6519.79mil,2643.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6821.711mil|Location2.X=6832.961mil|Location1.Y=2495.789mil|Location2.Y=2507.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6821.711mil|Location2.X=6832.961mil|Location1.Y=2495.789mil|Location2.Y=2507.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R24-1(6794.768mil,2535mil) on Bottom Layer And Track (6835.21mil,2501.414mil)(6854.79mil,2501.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6821.711mil|Location2.X=6832.961mil|Location1.Y=2562.961mil|Location2.Y=2574.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6821.711mil|Location2.X=6832.961mil|Location1.Y=2562.961mil|Location2.Y=2574.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R24-1(6794.768mil,2535mil) on Bottom Layer And Track (6835.21mil,2568.586mil)(6854.79mil,2568.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6857.039mil|Location2.X=6868.289mil|Location1.Y=2495.789mil|Location2.Y=2507.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6857.039mil|Location2.X=6868.289mil|Location1.Y=2495.789mil|Location2.Y=2507.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R24-2(6895.232mil,2535mil) on Bottom Layer And Track (6835.21mil,2501.414mil)(6854.79mil,2501.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6857.039mil|Location2.X=6868.289mil|Location1.Y=2562.961mil|Location2.Y=2574.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6857.039mil|Location2.X=6868.289mil|Location1.Y=2562.961mil|Location2.Y=2574.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R24-2(6895.232mil,2535mil) on Bottom Layer And Track (6835.21mil,2568.586mil)(6854.79mil,2568.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7156.711mil|Location2.X=7167.961mil|Location1.Y=2380.789mil|Location2.Y=2392.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7156.711mil|Location2.X=7167.961mil|Location1.Y=2380.789mil|Location2.Y=2392.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R25-1(7129.768mil,2420mil) on Bottom Layer And Track (7170.21mil,2386.414mil)(7189.79mil,2386.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7156.711mil|Location2.X=7167.961mil|Location1.Y=2447.961mil|Location2.Y=2459.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7156.711mil|Location2.X=7167.961mil|Location1.Y=2447.961mil|Location2.Y=2459.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R25-1(7129.768mil,2420mil) on Bottom Layer And Track (7170.21mil,2453.586mil)(7189.79mil,2453.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7192.039mil|Location2.X=7203.289mil|Location1.Y=2380.789mil|Location2.Y=2392.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7192.039mil|Location2.X=7203.289mil|Location1.Y=2380.789mil|Location2.Y=2392.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R25-2(7230.232mil,2420mil) on Bottom Layer And Track (7170.21mil,2386.414mil)(7189.79mil,2386.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7192.039mil|Location2.X=7203.289mil|Location1.Y=2447.961mil|Location2.Y=2459.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7192.039mil|Location2.X=7203.289mil|Location1.Y=2447.961mil|Location2.Y=2459.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R25-2(7230.232mil,2420mil) on Bottom Layer And Track (7170.21mil,2453.586mil)(7189.79mil,2453.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5160.595mil|Location2.X=5171.845mil|Location1.Y=1859.218mil|Location2.Y=1870.468mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5160.595mil|Location2.X=5171.845mil|Location1.Y=1859.218mil|Location2.Y=1870.468mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R29-1(5180mil,1882.56mil) on Top Layer And Track (5166.22mil,1853.032mil)(5166.22mil,1856.968mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5188.155mil|Location2.X=5199.405mil|Location1.Y=1859.218mil|Location2.Y=1870.468mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5188.155mil|Location2.X=5199.405mil|Location1.Y=1859.218mil|Location2.Y=1870.468mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R29-1(5180mil,1882.56mil) on Top Layer And Track (5193.78mil,1853.032mil)(5193.78mil,1856.968mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5160.595mil|Location2.X=5171.845mil|Location1.Y=1839.532mil|Location2.Y=1850.782mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5160.595mil|Location2.X=5171.845mil|Location1.Y=1839.532mil|Location2.Y=1850.782mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R29-2(5180mil,1827.44mil) on Top Layer And Track (5166.22mil,1853.032mil)(5166.22mil,1856.968mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5188.155mil|Location2.X=5199.405mil|Location1.Y=1839.532mil|Location2.Y=1850.782mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5188.155mil|Location2.X=5199.405mil|Location1.Y=1839.532mil|Location2.Y=1850.782mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R29-2(5180mil,1827.44mil) on Top Layer And Track (5193.78mil,1853.032mil)(5193.78mil,1856.968mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3442.16mil|Location2.X=3453.41mil|Location1.Y=2570.626mil|Location2.Y=2581.876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3442.16mil|Location2.X=3453.41mil|Location1.Y=2570.626mil|Location2.Y=2581.876mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R3-1(3415.218mil,2609.838mil) on Bottom Layer And Track (3455.658mil,2576.25mil)(3475.24mil,2576.25mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3442.16mil|Location2.X=3453.41mil|Location1.Y=2637.799mil|Location2.Y=2649.049mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3442.16mil|Location2.X=3453.41mil|Location1.Y=2637.799mil|Location2.Y=2649.049mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R3-1(3415.218mil,2609.838mil) on Bottom Layer And Track (3455.658mil,2643.424mil)(3475.24mil,2643.424mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4116.711mil|Location2.X=4127.961mil|Location1.Y=2675.789mil|Location2.Y=2687.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4116.711mil|Location2.X=4127.961mil|Location1.Y=2675.789mil|Location2.Y=2687.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R3-1(4089.768mil,2715mil) on Bottom Layer And Track (4130.21mil,2681.414mil)(4149.79mil,2681.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4116.711mil|Location2.X=4127.961mil|Location1.Y=2742.961mil|Location2.Y=2754.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4116.711mil|Location2.X=4127.961mil|Location1.Y=2742.961mil|Location2.Y=2754.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R3-1(4089.768mil,2715mil) on Bottom Layer And Track (4130.21mil,2748.586mil)(4149.79mil,2748.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3477.488mil|Location2.X=3488.738mil|Location1.Y=2570.626mil|Location2.Y=2581.876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3477.488mil|Location2.X=3488.738mil|Location1.Y=2570.626mil|Location2.Y=2581.876mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.873mil &lt; 10mil) Between Pad R3-2(3515.68mil,2609.838mil) on Bottom Layer And Track (3455.658mil,2576.25mil)(3475.24mil,2576.25mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3477.488mil|Location2.X=3488.738mil|Location1.Y=2637.799mil|Location2.Y=2649.049mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3477.488mil|Location2.X=3488.738mil|Location1.Y=2637.799mil|Location2.Y=2649.049mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R3-2(3515.68mil,2609.838mil) on Bottom Layer And Track (3455.658mil,2643.424mil)(3475.24mil,2643.424mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4152.039mil|Location2.X=4163.289mil|Location1.Y=2675.789mil|Location2.Y=2687.039mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4152.039mil|Location2.X=4163.289mil|Location1.Y=2675.789mil|Location2.Y=2687.039mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R3-2(4190.232mil,2715mil) on Bottom Layer And Track (4130.21mil,2681.414mil)(4149.79mil,2681.414mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4152.039mil|Location2.X=4163.289mil|Location1.Y=2742.961mil|Location2.Y=2754.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4152.039mil|Location2.X=4163.289mil|Location1.Y=2742.961mil|Location2.Y=2754.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.875mil &lt; 10mil) Between Pad R3-2(4190.232mil,2715mil) on Bottom Layer And Track (4130.21mil,2748.586mil)(4149.79mil,2748.586mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.875mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3782.16mil|Location2.X=3793.41mil|Location1.Y=2630.626mil|Location2.Y=2641.876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3782.16mil|Location2.X=3793.41mil|Location1.Y=2630.626mil|Location2.Y=2641.876mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R4-1(3755.218mil,2669.838mil) on Bottom Layer And Track (3795.658mil,2636.25mil)(3815.24mil,2636.25mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3782.16mil|Location2.X=3793.41mil|Location1.Y=2697.799mil|Location2.Y=2709.049mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3782.16mil|Location2.X=3793.41mil|Location1.Y=2697.799mil|Location2.Y=2709.049mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R4-1(3755.218mil,2669.838mil) on Bottom Layer And Track (3795.658mil,2703.424mil)(3815.24mil,2703.424mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3817.488mil|Location2.X=3828.738mil|Location1.Y=2630.626mil|Location2.Y=2641.876mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3817.488mil|Location2.X=3828.738mil|Location1.Y=2630.626mil|Location2.Y=2641.876mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.873mil &lt; 10mil) Between Pad R4-2(3855.68mil,2669.838mil) on Bottom Layer And Track (3795.658mil,2636.25mil)(3815.24mil,2636.25mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3817.488mil|Location2.X=3828.738mil|Location1.Y=2697.799mil|Location2.Y=2709.049mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3817.488mil|Location2.X=3828.738mil|Location1.Y=2697.799mil|Location2.Y=2709.049mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (7.872mil &lt; 10mil) Between Pad R4-2(3855.68mil,2669.838mil) on Bottom Layer And Track (3795.658mil,2703.424mil)(3815.24mil,2703.424mil) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [7.872mil]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDZKY1QCDWACVBNZY32ZGEYDRP4OYA5P4QZ213BZIFPQTZC3V1TDPL"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk to Silk (Clearance=10mil) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5494.377mil|Location2.X=5505.627mil|Location1.Y=2435.898mil|Location2.Y=2447.148mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5494.377mil|Location2.X=5505.627mil|Location1.Y=2435.898mil|Location2.Y=2447.148mil|Absolute=True">Silk To Silk Clearance Constraint: (8.056mil &lt; 10mil) Between Text "R20" (5544.987mil,2405.005mil) on Bottom Overlay And Track (5492.36mil,2449.488mil)(5527.64mil,2449.488mil) on Bottom Overlay Silk Text to Silk Clearance [8.056mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3117.073mil|Location2.X=3124.739mil|Location1.Y=2325.845mil|Location2.Y=2333.512mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3117.073mil|Location2.X=3124.739mil|Location1.Y=2325.845mil|Location2.Y=2333.512mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 10mil) Between Text "R6" (3120.906mil,2359.669mil) on Bottom Overlay And Track (3087.914mil,2329.134mil)(3202.086mil,2329.134mil) on Bottom Overlay Silk Text to Silk Clearance [0mil]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDMJZCKQSORXU35L20LL01C1VCH5WNVTLTDSXQSCCYWULJMQHNDEO"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Net Antennae (Tolerance=0mil) (All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2657.5mil|Location2.X=2711.566mil|Location1.Y=2162.5mil|Location2.Y=2247.687mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2657.5mil|Location2.X=2711.566mil|Location1.Y=2162.5mil|Location2.Y=2247.687mil|Absolute=True">Net Antennae: Via (2680mil,2185mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2992.95mil|Location2.X=3047.016mil|Location1.Y=2247.338mil|Location2.Y=2332.525mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2992.95mil|Location2.X=3047.016mil|Location1.Y=2247.338mil|Location2.Y=2332.525mil|Absolute=True">Net Antennae: Via (3015.45mil,2269.838mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3327.95mil|Location2.X=3382.016mil|Location1.Y=2322.338mil|Location2.Y=2407.525mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3327.95mil|Location2.X=3382.016mil|Location1.Y=2322.338mil|Location2.Y=2407.525mil|Absolute=True">Net Antennae: Via (3350.45mil,2344.838mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3667.95mil|Location2.X=3722.016mil|Location1.Y=2382.338mil|Location2.Y=2467.525mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3667.95mil|Location2.X=3722.016mil|Location1.Y=2382.338mil|Location2.Y=2467.525mil|Absolute=True">Net Antennae: Via (3690.45mil,2404.838mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4342.5mil|Location2.X=4396.566mil|Location1.Y=2457.5mil|Location2.Y=2542.687mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4342.5mil|Location2.X=4396.566mil|Location1.Y=2457.5mil|Location2.Y=2542.687mil|Absolute=True">Net Antennae: Via (4365mil,2480mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4687.5mil|Location2.X=4741.566mil|Location1.Y=2477.5mil|Location2.Y=2562.687mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4687.5mil|Location2.X=4741.566mil|Location1.Y=2477.5mil|Location2.Y=2562.687mil|Absolute=True">Net Antennae: Via (4710mil,2500mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5017.5mil|Location2.X=5071.566mil|Location1.Y=2472.5mil|Location2.Y=2557.687mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5017.5mil|Location2.X=5071.566mil|Location1.Y=2472.5mil|Location2.Y=2557.687mil|Absolute=True">Net Antennae: Via (5040mil,2495mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5361.588mil|Location2.X=5415.654mil|Location1.Y=2452.338mil|Location2.Y=2537.525mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5361.588mil|Location2.X=5415.654mil|Location1.Y=2452.338mil|Location2.Y=2537.525mil|Absolute=True">Net Antennae: Via (5384.088mil,2474.838mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5701.73mil|Location2.X=5755.796mil|Location1.Y=2427.5mil|Location2.Y=2512.687mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=5701.73mil|Location2.X=5755.796mil|Location1.Y=2427.5mil|Location2.Y=2512.687mil|Absolute=True">Net Antennae: Via (5724.23mil,2450mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6032.18mil|Location2.X=6086.246mil|Location1.Y=2382.338mil|Location2.Y=2467.525mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6032.18mil|Location2.X=6086.246mil|Location1.Y=2382.338mil|Location2.Y=2467.525mil|Absolute=True">Net Antennae: Via (6054.68mil,2404.838mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6372.18mil|Location2.X=6426.246mil|Location1.Y=2322.338mil|Location2.Y=2407.525mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6372.18mil|Location2.X=6426.246mil|Location1.Y=2322.338mil|Location2.Y=2407.525mil|Absolute=True">Net Antennae: Via (6394.68mil,2344.838mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6707.18mil|Location2.X=6761.246mil|Location1.Y=2247.338mil|Location2.Y=2332.525mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=6707.18mil|Location2.X=6761.246mil|Location1.Y=2247.338mil|Location2.Y=2332.525mil|Absolute=True">Net Antennae: Via (6729.68mil,2269.838mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7046.73mil|Location2.X=7100.796mil|Location1.Y=2137.5mil|Location2.Y=2222.687mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\Maximus\OneDrive - Queensland University of Technology\Documents\PROJECTS\egb220\PCB_Projects\SensorBoard\Sensor_board.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=7046.73mil|Location2.X=7100.796mil|Location1.Y=2137.5mil|Location2.Y=2222.687mil|Absolute=True">Net Antennae: Via (7069.23mil,2160mil) from Top Layer to Bottom Layer </acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br></body>
+</html>

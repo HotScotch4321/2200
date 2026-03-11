@@ -1,0 +1,4 @@
+Change Component Designator: OldDesignator=C? NewDesignator=C1
+Added Member To Class: ClassName=sensor Member=Component R3 RNCP1206FTD200R
+Added Member To Class: ClassName=sensor Member=Component R7 CRGCQ1206J10K
+Added Member To Class: ClassName=sensor Member=Component U3 QRE1113GR

@@ -1,0 +1,5 @@
+Remove Pin=J?-1 From Net=MUX_OUTPUT
+Remove Pin=J?-2 From Net=SENS_MUX_A
+Remove Pin=J?-3 From Net=SENS_MUX_B
+Remove Pin=J?-4 From Net=SENS_MUX_C
+Remove Pin=J?-5 From Net=SENS_MUX_D

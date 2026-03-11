@@ -19,7 +19,7 @@ void loop() {
             LED_off(i);     
         }
     }
-    button_led_control(); 
+
 }
 
 int main(void)
