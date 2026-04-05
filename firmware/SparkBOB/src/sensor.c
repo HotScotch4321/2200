@@ -36,7 +36,7 @@ uint16_t read_ADC(uint8_t channel)
     return ADC; 
 }
 
-bool read_sensor(uint8_t sensor_index) 
+bool read_sensor_binary(uint8_t sensor_index) 
 {
     // Prevent out-of-bounds array access
     if (sensor_index > 7) return false; 
@@ -47,3 +47,11 @@ bool read_sensor(uint8_t sensor_index)
     // Return true if seeing white (below threshold)
     return (adc_value < SENSOR_THRESHOLD); 
 }
+
+uint16_t read_sensor(uint8_t sensor_index)
+{
+    if (sensor_index > 7) return 0; // Prevent out-of-bounds access
+    
+    return read_ADC(sensor_channels[sensor_index]);
+}
+

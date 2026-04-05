@@ -1,0 +1,5 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "LDL1117S50R_") (type "KiCad") (uri "C:/Users/maxim/Downloads/kicad/LDL1117S50R_/LDL1117S50R_.kicad_sym") (options "") (descr ""))
+	(lib (name "LM66100DCKR") (type "KiCad") (uri "C:/Users/maxim/Downloads/kicad/LM66100DCKR/LM66100DCKR.kicad_sym") (options "") (descr ""))
+)
