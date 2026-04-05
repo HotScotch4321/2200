@@ -3,10 +3,9 @@
 #include "led.h"
 #include "sensor.h"
 #include "motor.h"
-#include "timer.h" // Added for timer and flag
-#include "pid.h"   // Added for compute_PID
+#include "timer.h" 
+#include "pid.h"   
 
-// Define states for the line follower
 typedef enum {
     STATE_STRAIGHT,
     STATE_TURN_LEFT,
@@ -18,19 +17,14 @@ void setup() {
     init_ADC();
     init_LEDS();
     setupMotors();
-    init_timer(); // Initialize the 100Hz interrupt timer
+    init_timer(); 
 }
 
 void loop() 
 {
-    // The superloop checks the hardware flag directly
     if (pid_run_flag) {
         pid_run_flag = 0; // Clear it so we wait for the next tick
-
-        // Heavy computations now run outside the ISR
         int16_t pid_output = compute_PID();
-        
-        // Map the pid output error correction to motor speeds
         adjust_motor_speed(pid_output);
     }
 }

@@ -32,7 +32,6 @@ static volatile uint16_t timer_ticks = 0;
 // Interrupt Service Routine that fires at 100Hz
 ISR(TIMER1_COMPA_vect)
 {
-    timer_ticks++;
-    // Tell the main loop it is time to do math
+    //timer_ticks++;
     pid_run_flag = 1; 
 }
