@@ -16,10 +16,6 @@ void init_timer()
     TCCR1B = 0;
     TCNT1  = 0;
 
-    // We want 100Hz. F_CPU is usually 16,000,000.
-    // Timer clock = F_CPU / 8 (Prescaler) = 2,000,000 Hz.
-    // Target ticks = 2,000,000 / 100 = 20,000 ticks.
-    // Compare match register = Target ticks - 1 = 19999.
     OCR1A = 19999; 
     TCCR1B |= (1 << WGM12);
     TCCR1B |= (1 << CS11);

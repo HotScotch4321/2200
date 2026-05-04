@@ -17,7 +17,7 @@ void setup() {
     init_ADC();
     init_LEDS();
     setupMotors();
-    init_timer(); 
+    init_timer();
 }
 
 void loop() 
@@ -33,14 +33,29 @@ void loop()
 void test_loop() {
     motor1Speed(150);
     motor2Speed(150);
-    // test the speeds 
+    // test the speeds
+}
+
+// Mirror each sensor to its corresponding LED (LED on = sensor sees line)
+void sensor_test_loop() {
+    // Disconnect Timer0 PWM from PB7 (LED4) and PD0 (LED5) — they share pins with motors
+    TCCR0A &= ~((1 << COM0A1) | (1 << COM0B1));
+
+    for (uint8_t i = 0; i < 8; i++) {
+        if (read_sensor_binary(i)) {
+            LED_on(i);
+        } else {
+            LED_off(i);
+        }
+    }
 }
 
 int main(void)
 {
     setup();
     while (1) {
-        loop(); // Use this for line following
-        // test_loop(); // Use this for open loop driving tests
+        loop();            // Use this for line following
+        //test_loop();       // Use this for open loop driving tests
+        //sensor_test_loop(); // Use this to verify sensors with LEDs
     }
 }

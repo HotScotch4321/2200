@@ -39,9 +39,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.8,
-          "height": 1.27,
-          "width": 2.54
+          "drill": 1.2,
+          "height": 2.4,
+          "width": 2.4
         },
         "silk_line_width": 0.1,
         "silk_text_italic": false,
@@ -54,7 +54,28 @@
         }
       },
       "diff_pair_dimensions": [],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "courtyards_overlap|54765000|98675000|2425f986-1e62-4d9c-b246-414f88a8d134|ea4cb346-6e76-4c79-a78a-63a7465ab5b1",
+          ""
+        ],
+        [
+          "courtyards_overlap|71555000|98675000|2425f986-1e62-4d9c-b246-414f88a8d134|3b6b7c2c-7112-4d04-8ebf-19cce44c2516",
+          ""
+        ],
+        [
+          "silk_overlap|54210000|99230000|123d338f-f34e-4efa-896f-59690555f4c6|f5e76841-df08-4d3e-975d-b6fcda4d4114",
+          ""
+        ],
+        [
+          "silk_overlap|54330000|99110000|549901f3-73d1-462c-a755-80e0dfde6acb|6fab5b05-f688-4cfd-bc0b-55518d58c099",
+          ""
+        ],
+        [
+          "unconnected_items|53000000|64880000|F.Cu|4|67662cce-a69a-4f7e-be0e-8947dc51e81e|8d162ae6-e617-4ca5-8c87-329791604162",
+          ""
+        ]
+      ],
       "meta": {
         "version": 2
       },
@@ -508,7 +529,7 @@
     "last_paths": {
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "gerber and drill/",
       "specctra_dsn": "",
       "vrml": ""
     },
@@ -582,12 +603,30 @@
           "label": "Datasheet",
           "name": "Datasheet",
           "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Sim.Pins",
+          "name": "Sim.Pins",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Description",
+          "name": "Description",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "#",
+          "name": "${ITEM_NUMBER}",
+          "show": false
         }
       ],
       "filter_string": "",
       "group_symbols": true,
       "include_excluded_from_bom": true,
-      "name": "Default Editing",
+      "name": "",
       "sort_asc": true,
       "sort_field": "Reference"
     },
@@ -632,7 +671,7 @@
         "uuid": "041ea06f-32e5-4690-8e12-86e729d5fefb"
       }
     ],
-    "used_designators": "J1-3,U1-2",
+    "used_designators": "",
     "variants": []
   },
   "sheets": [
