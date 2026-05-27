@@ -39,22 +39,22 @@ bool tcs34725_init(void) {
     _delay_ms(10);
 
     uint8_t id = read_reg(REG_ID);
-    if (id != 0x44 && id != 0x10)  // 0x44 = TCS34725, 0x10 = TCS34721
+    if (id != 0x44) 
         return false;
 
-    write_reg(REG_ATIME,   0xEB);   // ~50 ms integration
+    write_reg(REG_ATIME,   0xEB);   // 50 ms integration
     write_reg(REG_CONTROL, 0x01);   // 4x gain
     write_reg(REG_ENABLE,  ENABLE_PON);
     _delay_ms(3);
     write_reg(REG_ENABLE,  ENABLE_PON | ENABLE_AEN);
-    _delay_ms(60);                  // wait one integration cycle
+    _delay_ms(60); // wait the chip spends 50ms counting photons before it has a valid reading for integration time
     return true;
 }
 
 TCSColor tcs34725_classify(const RGBCData *d) {
     if (d->c < 100) return TCS_COLOR_UNKNOWN;   // too dark, no reading
 
-    // normalise to clear channel (scale to 0-255)
+    // normalise to scale to 0-255
     uint8_t r = (uint32_t)d->r * 255 / d->c;
     uint8_t g = (uint32_t)d->g * 255 / d->c;
     uint8_t b = (uint32_t)d->b * 255 / d->c;

@@ -3,7 +3,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-// Timer1 prescaler /8 → 2 MHz tick, 0.5 µs per tick.
+// Timer1 prescaler /8  2 MHz tick, 0.5 µs per tic
 // distance_mm = ticks * 343 / 4000
 //
 // Rising-edge wait: TCNT1 reset to 0, 60 000 tick timeout (30 ms).
@@ -13,15 +13,11 @@
 #define T1_FALLING ((1 << ICNC1) |                (1 << CS11))
 
 void ultrasonic_init(void) {
-    // TRIG = PC7 output, idle low
     ULTRASONIC_TRIG_DDR  |=  (1 << ULTRASONIC_TRIG_BIT);
     ULTRASONIC_TRIG_PORT &= ~(1 << ULTRASONIC_TRIG_BIT);
 
-    // ECHO = PD4 (ICP1) input, no pull-up
     ULTRASONIC_ECHO_DDR  &= ~(1 << ULTRASONIC_ECHO_BIT);
     ULTRASONIC_ECHO_PORT &= ~(1 << ULTRASONIC_ECHO_BIT);
-
-    // Timer1: normal mode, noise cancel, prescaler /8, no interrupts
     TCCR1A = 0;
     TCCR1B = T1_RISING;
     TCCR1C = 0;
@@ -29,8 +25,7 @@ void ultrasonic_init(void) {
 }
 
 uint32_t ultrasonic_measure_mm(void) {
-    // 10 µs trigger pulse
-    ULTRASONIC_TRIG_PORT |=  (1 << ULTRASONIC_TRIG_BIT);
+    ULTRASONIC_TRIG_PORT |=  (1 << ULTRASONIC_TRIG_BIT);     // 10 µs trigger pulse
     _delay_us(10);
     ULTRASONIC_TRIG_PORT &= ~(1 << ULTRASONIC_TRIG_BIT);
 
