@@ -21,7 +21,7 @@ void mux_init(void) {
     adc_read_ch(MUX_ADC_CH);   
 }
 
-uint16_t mux_read(uint8_t channel) {
+uint16_t mux_read(uint8_t channel) { // 14 sensors so 0-13
     // Set S3–S0 in upper nibble of PORTF, preserve lower nibble
     MUX_PORT = (MUX_PORT & 0x0F) | ((channel & 0x0F) << 4);
     __asm__ __volatile__("nop\nnop\nnop\nnop\n");  // 1 µs settling time for mux switch

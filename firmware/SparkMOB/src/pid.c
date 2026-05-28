@@ -2,8 +2,9 @@
 #include "mux.h"
 #include "encoder.h"
 
-// mux channel 0-13
-static const int16_t sensor_pos[14] = { -7, -6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7 };
+// mux channels in use
+static const uint8_t  sensor_ch[8]  = { 1, 3, 5, 7, 8, 10, 12, 14 };
+static const int16_t  sensor_pos[8] = {-7,-5,-3,-1, 1,  3,  5,  7 };
 
 // State variables for line PID
 int16_t previous_error = 0;
@@ -36,8 +37,8 @@ int32_t get_position(void)
     int32_t weighted_value = 0;
     uint32_t sum_value = 0;
 
-    for (int i = 0; i < 14; i++) {
-        uint16_t s = mux_read(i);
+    for (int i = 0; i < 8; i++) {
+        uint16_t s = mux_read(sensor_ch[i]);
         weighted_value += (int32_t)s * sensor_pos[i];
         sum_value += s;
     }
