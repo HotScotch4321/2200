@@ -4,4 +4,4 @@
 #include <avr/io.h>
 
 void    bump_init(void);
-uint8_t bump_read(void);
+uint8_t bump_read(uint8_t idx);

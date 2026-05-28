@@ -51,17 +51,27 @@ bool tcs34725_init(void) {
     return true;
 }
 
-TCSColor tcs34725_classify(const RGBCData *d) {
-    if (d->c < 100) return TCS_COLOR_UNKNOWN;   // too dark, no reading
+bool tcs34725_read(RGBCData *out) {
+    if (!(read_reg(REG_STATUS) & STATUS_AVALID)) return false;
+
+    out->c = read_reg(REG_CDATAL) | (read_reg(REG_CDATAL + 1) << 8);
+    out->r = read_reg(REG_CDATAL + 2) | (read_reg(REG_CDATAL + 3) << 8);
+    out->g = read_reg(REG_CDATAL + 4) | (read_reg(REG_CDATAL + 5) << 8);
+    out->b = read_reg(REG_CDATAL + 6) | (read_reg(REG_CDATAL + 7) << 8);
+    return true;
+}
+
+TCSColour tcs34725_classify(const RGBCData *d) {
+    if (d->c < 100) return TCS_COLOUR_UNKNOWN;   // too dark, no reading
 
     // normalise to scale to 0-255
     uint8_t r = (uint32_t)d->r * 255 / d->c;
     uint8_t g = (uint32_t)d->g * 255 / d->c;
     uint8_t b = (uint32_t)d->b * 255 / d->c;
 
-    if (r > 100 && r > g * 2 && r > b * 2) return TCS_COLOR_RED;
-    if (g > 100 && g > r * 2 && g > b * 2) return TCS_COLOR_GREEN;
-    if (r > 80  && g > 80   && b > 80)     return TCS_COLOR_WHITE;
+    if (r > 100 && r > g * 2 && r > b * 2) return TCS_COLOUR_RED;
+    if (g > 100 && g > r * 2 && g > b * 2) return TCS_COLOUR_GREEN;
+    if (r > 80  && g > 80   && b > 80)     return TCS_COLOUR_WHITE;
 
-    return TCS_COLOR_UNKNOWN;
+    return TCS_COLOUR_UNKNOWN;
 }

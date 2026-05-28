@@ -3,17 +3,17 @@
 #include <util/delay.h>
 #include "pins.h"
 #include "encoder.h"
-#include "led.h"
+#include "indicators.h"
 #include "mux.h"
 #include "tcs34725.h"
 #include "pid.h"
-// #include "battery.h"
+// #include "battery.h" No Don't need it 
 
 typedef enum {
     STATE_STRAIGHT,
-    STATE_TURN_LEFT,
-    STATE_TURN_RIGHT,
-    STATE_LOST,
+    STATE_TURN_LEFT,        // huh? not sure we need this   
+    STATE_TURN_RIGHT,       // huh? not sure we need this          
+    STATE_LOST, 
     STATE_FOLLOW_LINE,
     STATE_SLOW_ZONE,
     STATE_PUSH_OBSTACLE,
@@ -22,7 +22,7 @@ typedef enum {
 } RobotState;
 
 // Finish-area stop settings
-#define FINISH_SENSOR 14      // I'm assuming 14 cause there are 14 sensors, and I'm guessing 14 is the right-most one 
+#define FINISH_SENSOR 1      // I'm assuming 1 as it's left most?
 #define RED_LED 0             // Replace with the actual red LED number
 #define STOP_TICKS 200        // 100 Hz = 2 seconds
 
@@ -33,8 +33,9 @@ uint16_t stop_counter = 0;
 uint8_t finish_lockout = 0;
 
 // Detects finish marker on right side of track
-uint8_t finish_marker_detected(void)
+uint8_t finish_marker_detected(void) 
 {
+    // needs proper logic conditions? lap counter maybe?
     return read_sensor_binary(FINISH_SENSOR);
 }
 
@@ -58,6 +59,39 @@ static inline uint8_t sig_trk_get(void) { //   SIG_TRK (PB6, input):  HIGH = lig
 //Red rectangular marker = start of slow zone 
 //Green rectangular marker = end of slow zone 
 // for tcs34725 - needs to detect red and green markers to determine when in slow zone
+
+void main_loop(void) {
+    // state machine
+    if (pid_run_flag) {
+        pid_run_flag = 0; // Clear it so we wait for the next tick
+    }
+    switch (current_state) {
+        case STATE_START_FINISH_STOP:
+            motor1Speed(0);
+            motor2Speed(0);
+            LED_off(2);
+            LED_on(RED_LED);
+
+            stop_counter++;
+            if (stop_counter >= STOP_TICKS) {
+                stop_counter = 0;
+                LED_off(RED_LED);
+                current_state = STATE_FOLLOW_LINE;
+            }
+            break;
+        case STATE_FOLLOW_LINE:
+            int16_t pid_output = compute_PID();
+            adjust_motor_speed(pid_output);
+
+            if (finish_marker_detected() && !finish_lockout) {
+                current_state = STATE_START_FINISH_STOP;
+                stop_counter = 0;
+                finish_lockout = 1;
+                break;
+            } 
+    }       // TODO: I'll fin this - zone slow detection, obstacle detect, last line, led, go circle and know when to stop
+    // when in slow zone, set SIG_SZ HIGH, otherwise LOW. This is for the payload communication to the main controller.
+}
 
 void loop(void)
 {

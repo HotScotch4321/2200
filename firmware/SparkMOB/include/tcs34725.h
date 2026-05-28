@@ -7,12 +7,12 @@ typedef struct {
 } RGBCData;
 
 typedef enum {
-    TCS_COLOR_UNKNOWN = 0,
-    TCS_COLOR_RED,
-    TCS_COLOR_GREEN,
-    TCS_COLOR_WHITE
-} TCSColor;
+    TCS_COLOUR_UNKNOWN = 0,
+    TCS_COLOUR_RED,
+    TCS_COLOUR_GREEN,
+    TCS_COLOUR_WHITE
+} TCSColour;
 
 bool     tcs34725_init(void);
 bool     tcs34725_read(RGBCData *out);
-TCSColor tcs34725_classify(const RGBCData *d);
+TCSColour tcs34725_classify(const RGBCData *d);

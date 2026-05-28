@@ -23,25 +23,21 @@
 
 #define BATT_ADC_CH 1     // PF1 = ADC1
 
-// Ultrasonic: TRIG = PC7, ECHO = PD4 (ICP1)
-#define ULTRASONIC_TRIG_DDR  DDRC
-#define ULTRASONIC_TRIG_PORT PORTC
-#define ULTRASONIC_TRIG_BIT  PC7
-#define ULTRASONIC_ECHO_DDR  DDRD
-#define ULTRASONIC_ECHO_PORT PORTD
-#define ULTRASONIC_ECHO_BIT  PD4   // ICP1
+// Indicators (LEDS)
+#define IND0_DDR    DDRD // RED LED - PD4
+#define IND0_PORT   PORTD           
+#define IND0_PIN    PIND        
+#define IND0_BIT    PD4    
 
-// LEDs
-#define LED0_DDR    DDRE
-#define LED0_PORT   PORTE
-#define LED0_PIN    PINE
-#define LED0_BIT    PE6
+#define IND1_DDR   DDRC // GREEN LED / buzzer (shared pin)- ADC11 PC7
+#define IND1_PORT  PORTC
+#define IND1_PIN   PINC
+#define IND1_BIT   PC7
 
-#define LED12_DDR   DDRB
-#define LED12_PORT  PORTB
-#define LED12_PIN   PINB
-#define LED1_BIT    PB0
-#define LED2_BIT    PB1
+#define IND2_DDR   DDRC // BLUE LED - ADC11 PC6
+#define IND2_PORT  PORTC
+#define IND2_PIN   PINC
+#define IND2_BIT   PC6
 
 #define SIG_DDR     DDRB // Track / size signal inputs (Timer1 OC pins used as GPIO)
 #define SIG_PORT    PORTB

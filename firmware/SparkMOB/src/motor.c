@@ -5,7 +5,8 @@ void motor_init(void) {
     // Direction pins as outputs
     DDRB |= (1 << PB0);   // Motor 1 direction
     DDRE |= (1 << PE6);   // Motor 2 direction
-
+ 
+    
     // PWM pins as outputs
     DDRB |= (1 << PB7);   // Motor 1 PWM (OC0A)
     DDRD |= (1 << PD0);   // Motor 2 PWM (OC0B)
