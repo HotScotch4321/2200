@@ -15,6 +15,7 @@ int32_t integral_sum = 0;
 #define STRAIGHT_COUNT_LIMIT 20
 #define CORNER_SPEED 130
 #define STRAIGHT_SPEED 180
+#define SLOW_SPEED 90
 
 // Speed PID — one per wheel, drives encoder speed to match target
 #define SPEED_KP 2.0f
@@ -30,6 +31,7 @@ int32_t speed_prev_err_2 = 0;
 volatile uint8_t pid_run_flag = 0;
 uint8_t robot_on_straight = 0;
 uint8_t straight_count = 0;
+uint8_t robot_in_slow_zone = 0;
 uint8_t line_lost = 0;
 
 int32_t get_position(void)
@@ -154,13 +156,9 @@ void adjust_motor_speed(int16_t pid_output) {
     }
 
     int16_t base_speed;
-
-// Sets base speed to defined speeds for corners & straights
-    if (robot_on_straight) {
-        base_speed = STRAIGHT_SPEED;
-    } else {
-        base_speed = CORNER_SPEED;
-    }
+    if (robot_in_slow_zone)      base_speed = SLOW_SPEED;
+    else if (robot_on_straight)  base_speed = STRAIGHT_SPEED;
+    else                         base_speed = CORNER_SPEED;
 
     int16_t target_left  = base_speed - pid_output;
     int16_t target_right = base_speed + pid_output;

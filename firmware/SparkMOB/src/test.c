@@ -171,10 +171,10 @@ void bump_test(void) {
 
 int main(void)
 {
-    setup();
-    while (1) {
-        loop();            // Use this for line following
+    // setup();
+    // while (1) {
+        // loop();            // Use this for line following
         //test_drive();      // Use this for open loop driving tests
         //sensor_test_loop(); // Use this to verify sensors with LEDs
-    }
+   // }
 }

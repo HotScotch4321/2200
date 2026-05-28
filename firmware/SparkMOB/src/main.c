@@ -1,121 +1,197 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+
 #include "pins.h"
 #include "encoder.h"
 #include "indicators.h"
 #include "mux.h"
 #include "tcs34725.h"
+#include "switch.h"
+#include "motor.h"
 #include "pid.h"
-// #include "battery.h" No Don't need it 
+#include "timer.h"
+
+#define LED_RED    0
+#define LED_GREEN  1
+#define LED_BLUE   2
+
+#define LEFT_SENSOR      0          // leftmost line sensor (corner markers)
+#define FINISH_SENSOR    13         // rightmost line sensor (start-finish marker)
+#define SENSOR_THRESHOLD 512        // ADC count above which a sensor sees white
+
+#define STOP_TICKS        200       // 2 s at 100 Hz
+#define MARKER_CONFIRM    3
+#define ROUTE_BIAS_TICKS  60
+#define ROUTE_BIAS_MAG    25
+
+extern uint8_t robot_in_slow_zone;  // defined in pid.c, drives SLOW_SPEED base
 
 typedef enum {
-    STATE_STRAIGHT,
-    STATE_TURN_LEFT,        // huh? not sure we need this   
-    STATE_TURN_RIGHT,       // huh? not sure we need this          
-    STATE_LOST, 
     STATE_FOLLOW_LINE,
     STATE_SLOW_ZONE,
-    STATE_PUSH_OBSTACLE,
-    STATE_START_FINISH_STOP,
-    STATE_LOST_LINE
+    STATE_START_FINISH_STOP
 } RobotState;
 
-// Finish-area stop settings
-#define RED_LED 0             // Replace with the actual red LED number
-#define STOP_TICKS 200        // 100 Hz = 2 seconds
+static RobotState state = STATE_FOLLOW_LINE;
 
-RobotState current_state = STATE_FOLLOW_LINE;
-uint16_t stop_counter = 0;
-
+static uint16_t stop_counter   = 0;
+static uint8_t  lap_count      = 0;
+static uint16_t route_bias_ctr = 0;
 
 static uint8_t finish_confirm = 0;
-uint8_t finish_marker_detected(void) {
-    int32_t pos = get_position();
-    if (pos == 100) { finish_confirm = 0; return 0; }
+static uint8_t red_confirm    = 0;
+static uint8_t green_confirm  = 0;
+static uint8_t left_confirm   = 0;
+static uint8_t left_latched   = 0;
 
-    if (mux_read(13) && pos > -40 && pos < 40) {
-        if (finish_confirm < 3) finish_confirm++;
-    } else {
-        finish_confirm = 0;
-    }
-    return finish_confirm >= 3;
-}
-
-// Payloaed communication signals:
 static inline void sig_init(void) {
-    SIG_DDR  |=  (1 << SIG_SZ_BIT);    // SZ output
-    SIG_DDR  &= ~(1 << SIG_TRK_BIT);   // TRK input
-    SIG_PORT &= ~(1 << SIG_SZ_BIT);    // SZ idle LOW
-    SIG_PORT |=  (1 << SIG_TRK_BIT);   // TRK pull-up
+    SIG_DDR  |=  (1 << SIG_SZ_BIT);
+    SIG_DDR  &= ~(1 << SIG_TRK_BIT);
+    SIG_PORT &= ~(1 << SIG_SZ_BIT);
+    SIG_PORT |=  (1 << SIG_TRK_BIT);
 }
 
-static inline void sig_sz_set(uint8_t high) { //   SIG_SZ  (PB5, output): HIGH = in slow zone, LOW = not
+static inline void sig_sz_set(uint8_t high) {
     if (high) SIG_PORT |=  (1 << SIG_SZ_BIT);
     else      SIG_PORT &= ~(1 << SIG_SZ_BIT);
 }
 
-static inline uint8_t sig_trk_get(void) { //   SIG_TRK (PB6, input):  HIGH = light follower tracking, LOW = not
-    return (SIG_PINREG >> SIG_TRK_BIT) & 1;
+// Read both edge 
+static void read_edges(uint8_t *left_white, uint8_t *right_white) {
+    *left_white  = mux_read(LEFT_SENSOR)   > SENSOR_THRESHOLD;
+    *right_white = mux_read(FINISH_SENSOR) > SENSOR_THRESHOLD;
 }
 
-//Red rectangular marker = start of slow zone 
-//Green rectangular marker = end of slow zone 
-// for tcs34725 - needs to detect red and green markers to determine when in slow zone
+// Left marker only: a crossover lights both edges, so right_white rejects it.
+// Markers sit at the start and end of every arc, so each one toggles state.
+static void corner_marker_update(uint8_t left_white, uint8_t right_white) {
+    uint8_t marker = left_white && !right_white;
+    if (marker) { if (left_confirm < MARKER_CONFIRM) left_confirm++; }
+    else left_confirm = 0;
 
-void main_loop(void) {
-    // state machine
-    if (pid_run_flag) {
-        pid_run_flag = 0; // Clear it so we wait for the next tick
-    }
-    switch (current_state) {
-        case STATE_START_FINISH_STOP:
-            motor1Speed(0);
-            motor2Speed(0);
-            LED_off(2);
-            LED_on(RED_LED);
+    uint8_t seen = left_confirm >= MARKER_CONFIRM;
+    if (seen && !left_latched) robot_on_straight = !robot_on_straight;
+    left_latched = seen;
 
-            stop_counter++;
-            if (stop_counter >= STOP_TICKS) {
-                stop_counter = 0;
-                LED_off(RED_LED);
-                current_state = STATE_FOLLOW_LINE;
-            }
+    led_set(LED_GREEN, robot_on_straight);
+}
+
+// Right marker only, rejecting crossovers the same way.
+static uint8_t finish_marker_detected(uint8_t left_white, uint8_t right_white) {
+    uint8_t marker = right_white && !left_white;
+    if (marker) { if (finish_confirm < MARKER_CONFIRM) finish_confirm++; }
+    else finish_confirm = 0;
+    return finish_confirm >= MARKER_CONFIRM;
+}
+
+static uint8_t red_marker_detected(void) {
+    RGBCData d;
+    if (tcs34725_read(&d) && tcs34725_classify(&d) == TCS_COLOUR_RED) {
+        if (red_confirm < MARKER_CONFIRM) red_confirm++;
+    } else red_confirm = 0;
+    return red_confirm >= MARKER_CONFIRM;
+}
+
+static uint8_t green_marker_detected(void) {
+    RGBCData d;
+    if (tcs34725_read(&d) && tcs34725_classify(&d) == TCS_COLOUR_GREEN) {
+        if (green_confirm < MARKER_CONFIRM) green_confirm++;
+    } else green_confirm = 0;
+    return green_confirm >= MARKER_CONFIRM;
+}
+
+void drive(void) {
+    switch (state) {
+
+    case STATE_START_FINISH_STOP:
+        motors_stop();
+        led_set(LED_RED,   1);
+        led_set(LED_GREEN, 0);
+        led_set(LED_BLUE,  0);
+        if (++stop_counter >= STOP_TICKS) {
+            stop_counter = 0;
+            led_set(LED_RED, 0);
+            state = STATE_FOLLOW_LINE;
+        }
+        break;
+
+    case STATE_FOLLOW_LINE: {
+        uint8_t lw, rw;
+        read_edges(&lw, &rw);
+        corner_marker_update(lw, rw);
+
+        robot_in_slow_zone = 0;
+        sig_sz_set(0);
+        led_set(LED_BLUE, 0);
+
+        adjust_motor_speed(compute_PID());
+
+        if (finish_marker_detected(lw, rw)) {
+            lap_count++;
+            finish_confirm = 0;
+            stop_counter   = 0;
+            state = STATE_START_FINISH_STOP;
             break;
-        case STATE_FOLLOW_LINE:
-            int16_t pid_output = compute_PID();
-            adjust_motor_speed(pid_output);
+        }
+        if (red_marker_detected()) {
+            red_confirm    = 0;
+            route_bias_ctr = ROUTE_BIAS_TICKS;
+            state = STATE_SLOW_ZONE;
+        }
+        break;
+    }
 
-            if (finish_marker_detected() && !finish_confirm) {
-                current_state = STATE_START_FINISH_STOP;
-                stop_counter = 0;
-                finish_confirm = 0;
-                break;
-            } 
-    }       // TODO: I'll fin this - zone slow detection, obstacle detect, last line, led, go circle and know when to stop
-    // when in slow zone, set SIG_SZ HIGH, otherwise LOW. This is for the payload communication to the main controller.
+    case STATE_SLOW_ZONE: {
+        uint8_t lw, rw;
+        read_edges(&lw, &rw);
+        corner_marker_update(lw, rw);
+
+        robot_in_slow_zone = 1;        // forces SLOW_SPEED in adjust_motor_speed
+        sig_sz_set(1);
+        led_set(LED_BLUE, bump_read(0) || bump_read(1));
+
+        int16_t pid_output = compute_PID();
+
+        // Alternate the fork each lap: even laps left, odd laps right.
+        // Hold the bias until the robot commits, then let tracking resume.
+        if (route_bias_ctr > 0) {
+            route_bias_ctr--;
+            pid_output += (lap_count % 2 == 0) ? -ROUTE_BIAS_MAG : ROUTE_BIAS_MAG;
+        }
+        adjust_motor_speed(pid_output);
+
+        if (green_marker_detected()) {
+            green_confirm  = 0;
+            route_bias_ctr = 0;
+            robot_in_slow_zone = 0;
+            sig_sz_set(0);
+            state = STATE_FOLLOW_LINE;
+        }
+        break;
+    }
+    }
 }
 
 int main(void) {
-    sei();
     led_init();
     mux_init();
-    sig_init();
+    motor_init();
     encoder_init();
-    // battery_init();
-    // ultrasonic_init();
+    sig_init();
     tcs34725_init();
+    bump_init();
+    timer_init();
+
+    led_all(0);
+    motors_stop();
+    robot_on_straight = 1;
+    sei();
 
     while (1) {
-        // Heartbeat
-        led_toggle(2);
-
-        // Mirror TRK input on LED1 for testing
-        led_set(1, sig_trk_get());
-
-        // TODO: slow-zone detection — drive SIG_SZ HIGH when in slow zone
-        sig_sz_set(0);
-
-        _delay_ms(100);
+        if (pid_run_flag) {
+            pid_run_flag = 0;
+            drive();
+        }
     }
 }

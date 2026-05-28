@@ -42,7 +42,7 @@ bool tcs34725_init(void) {
     if (id != 0x44) 
         return false;
 
-    write_reg(REG_ATIME,   0xEB);   // 50 ms integration
+    write_reg(REG_ATIME,   0xF6);   // 24 ms 0xF6 integration OR 12ms 0xFB OR 2.4ms 0xFE
     write_reg(REG_CONTROL, 0x01);   // 4x gain
     write_reg(REG_ENABLE,  ENABLE_PON);
     _delay_ms(3);
