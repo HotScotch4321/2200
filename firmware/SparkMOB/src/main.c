@@ -16,19 +16,20 @@
 #define LED_GREEN  1
 #define LED_BLUE   2
 
-#define LEFT_SENSOR      0          // leftmost line sensor 1 (corner markers)
-#define LMID_SENSOR      4          // spread samples for crossover detection - sensor 5 is right-middle
-#define RMID_SENSOR      9          // spread samples for crossover detection - sensor 10 is left-middle
-#define FINISH_SENSOR    13         // rightmost line sensor 14 (start-finish marker)
+#define LEFT_SENSOR      0
+#define LMID_SENSOR      4
+#define RMID_SENSOR      9
+#define FINISH_SENSOR    13
 #define SENSOR_THRESHOLD 512
+#define CROSSOVER_WHITE  3
 
-#define STOP_TICKS        200       // 2 s at 100 Hz
+#define STOP_TICKS        200
 #define MARKER_CONFIRM    3
-#define MARKER_LOCKOUT    20        // ignore markers for ~200 ms after a crossover
+#define MARKER_LOCKOUT    20
 #define ROUTE_BIAS_TICKS  60
 #define ROUTE_BIAS_MAG    25
 
-extern uint8_t robot_in_slow_zone;  // defined in pid.c, drives SLOW_SPEED base
+extern uint8_t robot_in_slow_zone;
 
 typedef enum {
     STATE_FOLLOW_LINE,
@@ -42,6 +43,7 @@ static uint16_t stop_counter   = 0;
 static uint8_t  lap_count      = 0;
 static uint16_t route_bias_ctr = 0;
 static uint8_t  marker_lockout = 0;
+static uint8_t  departed       = 0;  // set once sensor 13 goes dark after a stop
 
 static uint8_t finish_confirm = 0;
 static uint8_t red_confirm    = 0;
@@ -61,22 +63,31 @@ static inline void sig_sz_set(uint8_t high) {
     else      SIG_PORT &= ~(1 << SIG_SZ_BIT);
 }
 
-// One array snapshot per tick. Crossover is judged from how many sensors are
-// white at once, so it survives skew where one edge leads the other.
+// Both motors coast while the TCS34725 reads over I2C (SCL is PD0 = OC0B).
+// Motor 1 is paused too because PWM switching injects noise on the shared rails.
+static inline void motors_pwm_pause(void) {
+    TCCR0A &= ~((1 << COM0A1) | (1 << COM0A0));  // release PB7 from OC0A
+    TCCR0A &= ~((1 << COM0B1) | (1 << COM0B0));  // release PD0 from OC0B
+    PORTB  &= ~(1 << PB7);
+    PORTD  &= ~(1 << PD0);
+}
+
+static inline void motors_pwm_resume(void) {
+    TCCR0A |= (1 << COM0A1);  // reconnect OC0A
+    TCCR0A |= (1 << COM0B1);  // reconnect OC0B
+}
+
 static void scan_markers(uint8_t *left_white, uint8_t *right_white,
                          uint8_t *crossover) {
     uint8_t l  = mux_read(LEFT_SENSOR)   > SENSOR_THRESHOLD;
     uint8_t lm = mux_read(LMID_SENSOR)   > SENSOR_THRESHOLD;
     uint8_t rm = mux_read(RMID_SENSOR)   > SENSOR_THRESHOLD;
     uint8_t r  = mux_read(FINISH_SENSOR) > SENSOR_THRESHOLD;
-
     *left_white  = l;
     *right_white = r;
-    *crossover   = (l + lm + rm + r) >= MARKER_CONFIRM;
+    *crossover   = (l + lm + rm + r) >= CROSSOVER_WHITE;
 }
 
-// Left marker toggles straight/curve. Blocked during and shortly after any
-// crossover so a skewed crossing cannot flip the state.
 static void corner_marker_update(uint8_t left_white, uint8_t right_white,
                                  uint8_t blocked) {
     uint8_t marker = !blocked && left_white && !right_white;
@@ -90,8 +101,14 @@ static void corner_marker_update(uint8_t left_white, uint8_t right_white,
     indicators_set(LED_GREEN, robot_on_straight);
 }
 
+// departed must be set before this can fire, preventing a false trigger on
+// the start line at power-on or immediately after a stop.
 static uint8_t finish_marker_detected(uint8_t left_white, uint8_t right_white,
                                       uint8_t blocked) {
+    if (!departed) {
+        if (!right_white) departed = 1;  // robot has left the line, arm detection
+        return 0;
+    }
     uint8_t marker = !blocked && right_white && !left_white;
     if (marker) { if (finish_confirm < MARKER_CONFIRM) finish_confirm++; }
     else finish_confirm = 0;
@@ -100,7 +117,10 @@ static uint8_t finish_marker_detected(uint8_t left_white, uint8_t right_white,
 
 static uint8_t red_marker_detected(void) {
     RGBCData d;
-    if (tcs34725_read(&d) && tcs34725_classify(&d) == TCS_COLOUR_RED) {
+    motors_pwm_pause();
+    uint8_t valid = tcs34725_read(&d);
+    motors_pwm_resume();
+    if (valid && tcs34725_classify(&d) == TCS_COLOUR_RED) {
         if (red_confirm < MARKER_CONFIRM) red_confirm++;
     } else red_confirm = 0;
     return red_confirm >= MARKER_CONFIRM;
@@ -108,13 +128,16 @@ static uint8_t red_marker_detected(void) {
 
 static uint8_t green_marker_detected(void) {
     RGBCData d;
-    if (tcs34725_read(&d) && tcs34725_classify(&d) == TCS_COLOUR_GREEN) {
+    motors_pwm_pause();
+    uint8_t valid = tcs34725_read(&d);
+    motors_pwm_resume();
+    if (valid && tcs34725_classify(&d) == TCS_COLOUR_GREEN) {
         if (green_confirm < MARKER_CONFIRM) green_confirm++;
     } else green_confirm = 0;
     return green_confirm >= MARKER_CONFIRM;
 }
 
-static uint8_t update_lockout(uint8_t crossover) { // Maintain the crossover lockout from one array snapshot.
+static uint8_t update_lockout(uint8_t crossover) {
     if (crossover) marker_lockout = MARKER_LOCKOUT;
     else if (marker_lockout) marker_lockout--;
     return crossover || marker_lockout > 0;
@@ -125,12 +148,13 @@ void drive(void) {
 
     case STATE_START_FINISH_STOP:
         motors_stop();
-        indicators_set(0, 1); // LED_RED
-        indicators_set(1, 0); // LED_GREEN
-        indicators_set(2, 0); // LED_BLUE
+        indicators_set(LED_RED,   1);
+        indicators_set(LED_GREEN, 0);
+        indicators_set(LED_BLUE,  0);
         if (++stop_counter >= STOP_TICKS) {
             stop_counter = 0;
-            indicators_set(0, 0);
+            departed     = 0;       // re-arm: must leave the line before next finish
+            indicators_set(LED_RED, 0);
             state = STATE_FOLLOW_LINE;
         }
         break;
@@ -143,7 +167,7 @@ void drive(void) {
 
         robot_in_slow_zone = 0;
         sig_sz_set(0);
-        indicators_set(LED_BLUE, 0); // LED_BLUE
+        indicators_set(LED_BLUE, 0);
 
         adjust_motor_speed(compute_PID());
 
@@ -168,14 +192,12 @@ void drive(void) {
         uint8_t blocked = update_lockout(cx);
         corner_marker_update(lw, rw, blocked);
 
-        robot_in_slow_zone = 1;        // forces SLOW_SPEED in adjust_motor_speed
+        robot_in_slow_zone = 1;
         sig_sz_set(1);
         indicators_set(LED_BLUE, bump_read(0) || bump_read(1));
 
         int16_t pid_output = compute_PID();
 
-        // Alternate the fork each lap: even laps left, odd laps right.
-        // Hold the bias until the robot commits, then let tracking resume.
         if (route_bias_ctr > 0) {
             route_bias_ctr--;
             pid_output += (lap_count % 2 == 0) ? -ROUTE_BIAS_MAG : ROUTE_BIAS_MAG;
@@ -183,8 +205,8 @@ void drive(void) {
         adjust_motor_speed(pid_output);
 
         if (green_marker_detected()) {
-            green_confirm  = 0;
-            route_bias_ctr = 0;
+            green_confirm      = 0;
+            route_bias_ctr     = 0;
             robot_in_slow_zone = 0;
             sig_sz_set(0);
             state = STATE_FOLLOW_LINE;
@@ -194,45 +216,28 @@ void drive(void) {
     }
 }
 
-// TESTING ONLY BELOW
+// --- test functions ---
 
 void LED_test(void) {
-    // for (uint8_t i = 0; i < 3; i++) {
-    //     indicators_set(i, 1); // Turn on LED
-    //     _delay_ms(1000);
-    //     indicators_set(i, 0); // Turn off LED
-    // }
     indicators_set(LED_GREEN, 1);
-    indicators_set(LED_RED, 1);
-    
+    indicators_set(LED_RED,   1);
 }
 
-void test_drive(void) { // Simple open-loop forward movement for testing
-              motor1_speed(150);
-              motor2_speed(150);
-              // test the speeds
-          }
+void test_drive(void) {
+    motor1_speed(150);
+    motor2_speed(150);
+}
 
 void bump_test(void) {
-    uint8_t bump1 = bump_read(0);
-    uint8_t bump2 = bump_read(1);
-    if (bump1) {
-        motor1_speed(150);
-        indicators_set(LED_GREEN, 1);
-    } else {
-        motor1_speed(0);
-        indicators_set(LED_GREEN, 0);
-    }
-
-    if (bump2) {
-        motor2_speed(150);
-        indicators_set(LED_RED, 1);
-    } else {
-        motor2_speed(0);
-        indicators_set(LED_RED, 0);
-    }
+    uint8_t b1 = bump_read(0);
+    uint8_t b2 = bump_read(1);
+    motor1_speed(b1 ? 150 : 0);
+    indicators_set(LED_GREEN, b1);
+    motor2_speed(b2 ? 150 : 0);
+    indicators_set(LED_RED, b2);
 }
-// TESTING ABOVE
+
+// ---
 
 int main(void) {
     indicators_init();
@@ -243,22 +248,16 @@ int main(void) {
     tcs34725_init();
     bump_init();
     init_timer();
-//  
-    //  indicators_all(0);
-    //  motors_stop();
-    //  robot_on_straight = 1;
+
+    indicators_all(0);
+    motors_stop();
+    robot_on_straight = 1;
     sei();
-    test_drive();
-     LED_test();
 
     while (1) {
         if (pid_run_flag) {
             pid_run_flag = 0;
             drive();
         }
-
-         // LED_test();
-        // bump_test();
-        test_drive();
     }
 }

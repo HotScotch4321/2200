@@ -10,4 +10,5 @@ void motor2_direction(uint8_t dir);
 void motor1_speed(uint8_t speed);    // 0 = stop, 255 = full speed
 void motor2_speed(uint8_t speed);
 void motors_stop(void);
- 
+void motor2_pwm_pause(void);
+void motor2_pwm_resume(void);

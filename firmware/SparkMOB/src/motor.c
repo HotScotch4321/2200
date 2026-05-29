@@ -42,3 +42,12 @@ void motors_stop(void) {
     OCR0A = 0;
     OCR0B = 0;
 }
+
+void motor2_pwm_pause(void) {
+    TCCR0A &= ~((1 << COM0B1) | (1 << COM0B0));
+    PORTD  &= ~(1 << PD0);   // drive low so motor 2 coasts
+}
+
+void motor2_pwm_resume(void) {
+    TCCR0A |= (1 << COM0B1); // reconnect OC0B to PD0
+}
