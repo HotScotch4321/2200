@@ -1,9 +1,10 @@
 #include "pid.h"
 #include "mux.h"
 #include "encoder.h"
+#include "motor.h"
 
 // mux channels in use
-static const uint8_t  sensor_ch[8]  = { 1, 3, 5, 7, 8, 10, 12, 14 };
+static const uint8_t sensor_ch[8] = { 0, 2, 4, 6, 7, 9, 11, 13 };
 static const int16_t  sensor_pos[8] = {-7,-5,-3,-1, 1,  3,  5,  7 };
 
 // State variables for line PID
@@ -27,8 +28,6 @@ int32_t speed_integral_1 = 0;
 int32_t speed_integral_2 = 0;
 int32_t speed_prev_err_1 = 0;
 int32_t speed_prev_err_2 = 0;
-
-volatile uint8_t pid_run_flag = 0;
 uint8_t robot_on_straight = 0;
 uint8_t straight_count = 0;
 uint8_t robot_in_slow_zone = 0;
@@ -69,8 +68,8 @@ int16_t compute_PID(void)
         speed_integral_2 = 0;
         speed_prev_err_1 = 0;
         speed_prev_err_2 = 0;
-        motor1Speed(0);
-        motor2Speed(0);
+        motor1_speed(0);
+        motor2_speed(0);
         return 0;
     }
     line_lost = 0;
@@ -150,8 +149,8 @@ static uint8_t speed_pid_m2(int16_t target_ticks, int32_t actual_ticks)
 
 void adjust_motor_speed(int16_t pid_output) {
     if (line_lost) {
-        motor1Speed(0);
-        motor2Speed(0);
+        motor1_speed(0);
+        motor2_speed(0);
         return;
     }
 
@@ -170,7 +169,7 @@ void adjust_motor_speed(int16_t pid_output) {
     uint8_t pwm_left  = speed_pid_m1(target_left,  encoder1_speed());
     uint8_t pwm_right = speed_pid_m2(target_right, encoder2_speed());
 
-    motor1Speed(pwm_left);
-    motor2Speed(pwm_right);
+    motor1_speed(pwm_left);
+    motor2_speed(pwm_right);
 
 }

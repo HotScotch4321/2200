@@ -24,17 +24,17 @@
 #define BATT_ADC_CH 1     // PF1 = ADC1
 
 // Indicators (LEDS)
-#define IND0_DDR    DDRD // RED LED - PD4
-#define IND0_PORT   PORTD           
-#define IND0_PIN    PIND        
-#define IND0_BIT    PD4    
+#define IND0_DDR    DDRC // RED LED - PC7 - stle from ultrasonic pin
+#define IND0_PORT   PORTC           
+#define IND0_PIN    PINC        
+#define IND0_BIT    PC7    
 
-#define IND1_DDR   DDRC // GREEN LED / buzzer (shared pin)- ADC11 PC7
-#define IND1_PORT  PORTC
-#define IND1_PIN   PINC
-#define IND1_BIT   PC7
+#define IND1_DDR   DDRD // GREEN LED / buzzer (shared pin)- ADC11 PD4 also stole form ultrasonic
+#define IND1_PORT  PORTD
+#define IND1_PIN   PIND
+#define IND1_BIT   PD4
 
-#define IND2_DDR   DDRC // BLUE LED - ADC11 PC6
+#define IND2_DDR   DDRC // BLUE LED - ADC11 PC6 - curved wire
 #define IND2_PORT  PORTC
 #define IND2_PIN   PINC
 #define IND2_BIT   PC6
