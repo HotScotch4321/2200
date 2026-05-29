@@ -34,7 +34,7 @@ static uint8_t read_reg(uint8_t reg) {
     return val;
 }
 
-bool tcs34725_init(void) {
+bool tcs34725_init(void) { 
     twi_init();
     _delay_ms(10);
 

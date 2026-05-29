@@ -202,9 +202,9 @@ void LED_test(void) {
     //     _delay_ms(1000);
     //     indicators_set(i, 0); // Turn off LED
     // }
-    indicators_set(LED_BLUE, 1);
-    _delay_ms(1000);
-    indicators_set(LED_BLUE, 0);
+    indicators_set(LED_GREEN, 1);
+    indicators_set(LED_RED, 1);
+    
 }
 
 void test_drive(void) { // Simple open-loop forward movement for testing
@@ -218,21 +218,25 @@ void bump_test(void) {
     uint8_t bump2 = bump_read(1);
     if (bump1) {
         motor1_speed(150);
+        indicators_set(LED_GREEN, 1);
     } else {
         motor1_speed(0);
+        indicators_set(LED_GREEN, 0);
     }
 
     if (bump2) {
         motor2_speed(150);
+        indicators_set(LED_RED, 1);
     } else {
         motor2_speed(0);
+        indicators_set(LED_RED, 0);
     }
 }
 // TESTING ABOVE
 
 int main(void) {
     indicators_init();
-     mux_init();
+    mux_init();
     motor_init();
     encoder_init();
     sig_init();
@@ -244,15 +248,17 @@ int main(void) {
     //  motors_stop();
     //  robot_on_straight = 1;
     sei();
+    test_drive();
+     LED_test();
 
     while (1) {
-        //if (pid_run_flag) {
-        //    pid_run_flag = 0;
-        //    drive();
-        //}
+        if (pid_run_flag) {
+            pid_run_flag = 0;
+            drive();
+        }
 
-         //LED_test();
-        //bump_test();
-         test_drive();
+         // LED_test();
+        // bump_test();
+        test_drive();
     }
 }
